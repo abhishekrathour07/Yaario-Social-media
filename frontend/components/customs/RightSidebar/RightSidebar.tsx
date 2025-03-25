@@ -16,7 +16,7 @@ const RightSidebar = () => {
     let year = d.getFullYear();
 
     return (
-        <div className="w-80 h-screen bg-slate-800 p-4 text-white overflow-y-auto">
+        <div className="w-80 h-screen bg-slate-800 p-6 text-white overflow-y-auto">
             <div className="flex flex-col h-full">
                 <SearchBox />
 

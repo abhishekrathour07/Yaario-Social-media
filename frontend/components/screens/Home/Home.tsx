@@ -3,7 +3,7 @@ import React from 'react'
 
 const Home = () => {
     return (
-        <div className='bg-slate-900 h-screen p-4 text-white overflow-y-scroll scrollbar-hide'>
+        <div className='bg-slate-900 h-screen p-4 text-white overflow-y-scroll no-scrollbar'>
             <Stories />
         </div>
     )

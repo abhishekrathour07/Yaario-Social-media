@@ -11,16 +11,15 @@ const Stories = () => {
         { id: 3, name: 'rahul Gupta', image: null },
         { id: 4, name: 'rohit Singh', image: null },
         { id: 5, name: 'Rishu', image: null },
-        { id: 7, name: 'Rishu', image: null },
-        { id: 8, name: 'Rishu', image: null },
+       
        
     ]
 
     return (
-        <div className=" bg-slate-800  rounded-lg p-4 overflow-x-scroll">
-            <div className="flex gap-4  pb-2">
+        <div className=" bg-slate-800  rounded-lg p-4 overflow-x-scroll no-scrollbar">
+            <div className="flex gap-4  pb-2 pr-4">
                 {stories.map((story) => (
-                    <div key={story.id} className="flex-shrink-0 cursor-pointer">
+                    <div key={story.id} className=" cursor-pointer">
                         <div className="relative w-32 h-48 rounded-lg overflow-hidden group">
                             {story.isCreate ? (
                                 <>
@@ -39,9 +38,6 @@ const Stories = () => {
                                             }
                                             alt={story.name}
                                         />
-                                        <AvatarFallback>
-                                            {story.name.split(' ').map(n => n[0]).join('')}
-                                        </AvatarFallback>
                                     </Avatar>
                                 </>
                             )}
