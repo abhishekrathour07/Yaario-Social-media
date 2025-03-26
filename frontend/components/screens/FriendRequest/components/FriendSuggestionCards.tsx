@@ -1,19 +1,18 @@
 import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import React from 'react'
 
-type FriendRequestCardsProps = {
-  name: string,
-  imageurl: string | null,
-  sendTime: string,
-  mutualFriends: string
-}
-const FriendRequestCards: React.FC<FriendRequestCardsProps> = ({
-  name,
-  imageurl,
-  sendTime,
-  mutualFriends
+
+type suggestionProps = {
+    name: string,
+    imageurl: string | null,
+    mutualFriends: string
+  }
+
+const FriendSuggestionCards:React.FC<suggestionProps> = ({
+    name,
+    imageurl,
+    mutualFriends
 }) => {
   return (
     <div className='bg-slate-800 p-4 rounded-lg flex gap-4 space-y-4'>
@@ -28,16 +27,15 @@ const FriendRequestCards: React.FC<FriendRequestCardsProps> = ({
       <div className='flex flex-col gap-2 text-white w-full'>
         <div className="flex justify-between items-center ">
           <h2>{name}</h2>
-          <p className='text-xs'>{sendTime}</p>
         </div>
         <p className='text-gray-500'>{mutualFriends}</p>
         <div className='flex gap-4'>
-          <CustomButton text='Confirm' className='w-full'/>
-          <button className='bg-transparent border rounded-md w-full text-white'>Cancel</button>
+          <CustomButton text='Add Friend' className='w-full'/>
+          <button className='bg-transparent border rounded-md w-full text-white'>Remove</button>
         </div>
       </div>
     </div>
   )
 }
 
-export default FriendRequestCards
+export default FriendSuggestionCards

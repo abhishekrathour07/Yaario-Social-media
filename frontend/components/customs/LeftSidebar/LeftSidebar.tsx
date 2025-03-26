@@ -2,7 +2,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, UserPlus, Bell, Settings, Users, User } from 'lucide-react'
+import { Home, UserPlus, Bell, Settings, User, Save } from 'lucide-react'
 
 const LeftSidebar = () => {
   
@@ -40,8 +40,8 @@ const LeftSidebar = () => {
 
           <Link href="/friend-suggestions"
             className={`flex items-center space-x-3 p-2 hover:bg-slate-700 rounded-lg ${isActive('/friend-suggestions')}`}>
-            <Users size={20} />
-            <span>Friend Suggestions</span>
+            <Save size={20} />
+            <span>Saved</span>
           </Link>
           <Link href="/profile"
             className={`flex items-center space-x-3 p-2 hover:bg-slate-700 rounded-lg ${isActive('/profile')}`}>
