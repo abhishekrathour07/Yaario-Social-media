@@ -6,13 +6,13 @@ import React from 'react'
 type FriendRequestCardsProps = {
   name: string,
   imageurl: string | null,
-  sendTime: string,
+  timeStamp: string,
   mutualFriends: string
 }
 const FriendRequestCards: React.FC<FriendRequestCardsProps> = ({
   name,
   imageurl,
-  sendTime,
+  timeStamp,
   mutualFriends
 }) => {
   return (
@@ -28,7 +28,7 @@ const FriendRequestCards: React.FC<FriendRequestCardsProps> = ({
       <div className='flex flex-col gap-2 text-white w-full'>
         <div className="flex justify-between items-center ">
           <h2>{name}</h2>
-          <p className='text-xs'>{sendTime}</p>
+          <p className='text-xs'>{timeStamp}</p>
         </div>
         <p className='text-gray-500'>{mutualFriends}</p>
         <div className='flex gap-4'>

@@ -23,7 +23,7 @@ const FriendRequest = () => {
                 name={list.name}
                 imageurl={list.imageurl}
                 mutualFriends={list.mutualFriends}
-                sendTime={list.sendTime}
+                timeStamp={list.sendTime}
               />
             </div>
           ))
