@@ -3,7 +3,7 @@ import React from 'react'
 
 interface NotificationItem {
     id: string
-    type: 'like' | 'comment' | 'follow' | 'mention'
+    type: 'like' | 'comment'  | 'mention'
     user: {
         name: string
         imageUrl: string | null
@@ -37,7 +37,18 @@ const Notification = () => {
             content: 'commented on your post: "Great photo!"',
             timestamp: '5 hours ago',
             isRead: true
-        }
+        },
+        {
+            id: '3',
+            type: 'like',
+            user: {
+                name: 'Abhishek singh',
+                imageUrl: null
+            },
+            content: 'reacted to your photo',
+            timestamp: '1 hours ago',
+            isRead: false
+        },
     ]
 
     return (

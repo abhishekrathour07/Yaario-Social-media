@@ -1,0 +1,67 @@
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Bookmark, Globe, Heart, MessageCircle, Share2, ThumbsUp } from 'lucide-react'
+import React from 'react'
+
+type ViewPostProps = {
+    name: string,
+    ProfileUrl: string | null,
+    postUrl: string,
+    likeCount: string,
+    timeStamp: string
+}
+
+const ViewPost: React.FC<ViewPostProps> = ({
+    name,
+    ProfileUrl,
+    postUrl,
+    likeCount,
+    timeStamp
+}) => {
+    return (
+        <div className='bg-slate-800 rounded-lg p-4 mb-4'>
+            <div className='flex gap-4 items-center mb-4'>
+                <Avatar className="h-12 w-12">
+                    <AvatarImage
+                        src={ProfileUrl !== null
+                            ? ProfileUrl
+                            : `https://ui-avatars.com/api/?name=${name}`
+                        }
+                    />
+                </Avatar>
+                <div>
+                    <h2 className='hover:text-underline cursor-pointer font-semibold'>{name}</h2>
+                    <p className='text-gray-400 flex gap-2 text-sm items-center justify-center'> {timeStamp} <Globe className='h-4 w-4 mt-1' /></p>
+                </div>
+            </div>
+
+            <div className='mb-4'>
+                <img 
+                    src={postUrl} 
+                    alt="Post content" 
+                    className='w-full h-96'
+                />
+            </div>
+           <p className='text-gray-400 px-4'>You and {likeCount} Other</p>
+            <div className='flex items-center justify-between px-4 py-2'>
+                    <button className='flex items-center gap-2 '>
+                        <ThumbsUp className='h-5 w-5' />
+                        <span>Like</span>
+                    </button>
+                    <button className='flex items-center gap-2 '>
+                        <MessageCircle className='h-5 w-5' />
+                        <span>Comment</span>
+                    </button>
+                    <button className='flex items-center gap-2 '>
+                        <Share2 className='h-5 w-5' />
+                        <span>Share</span>
+                    </button>
+                    <button className='flex items-center gap-2 hover:text-green-500 transition-colors'>
+                        <Bookmark className='h-5 w-5' />
+                        <span>Share</span>
+                    </button>
+            </div>
+        </div>
+    )
+}
+
+export default ViewPost
