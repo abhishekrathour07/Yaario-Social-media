@@ -3,7 +3,7 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Bookmark, Globe,  MessageCircle, Share2, ThumbsUp } from 'lucide-react'
 import React, { useState } from 'react'
 
-type ViewPostProps = {
+type MypostProps = {
     name: string,
     ProfileUrl: string | null,
     postUrl: string,
@@ -11,15 +11,16 @@ type ViewPostProps = {
     timeStamp: string
 }
 
-const ViewPost: React.FC<ViewPostProps> = ({
+const Mypost: React.FC<MypostProps> = ({
     name,
     ProfileUrl,
     postUrl,
     likeCount,
     timeStamp
 }) => {
-    const [like, setLike] = useState(false)
-    const [save, setSave] = useState(false)
+    const [like, setLike] = useState<boolean>(false)
+    const [save, setSave] = useState<boolean>(false)
+   
     return (
         <div className='bg-slate-800 rounded-lg p-4 mb-4'>
             <div className='flex gap-4 items-center mb-4'>
@@ -41,7 +42,7 @@ const ViewPost: React.FC<ViewPostProps> = ({
                 <img
                     src={postUrl}
                     alt="Post content"
-                    className='w-full h-96'
+                    className='w-full h-96 object-contain'
                 />
             </div>
             <p className='text-gray-400 px-4'>You and {likeCount} Other</p>
@@ -88,4 +89,4 @@ const ViewPost: React.FC<ViewPostProps> = ({
     )
 }
 
-export default ViewPost
+export default Mypost

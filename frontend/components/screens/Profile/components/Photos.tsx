@@ -2,16 +2,14 @@ import React from 'react'
 
 const Photos = () => {
     const images =[
-        "https://source.unsplash.com/random/300x300/?nature",
-        "https://source.unsplash.com/random/300x300/?technology",
-        "https://source.unsplash.com/random/300x300/?city",
-        "https://source.unsplash.com/random/300x300/?space",
-        "https://source.unsplash.com/random/300x300/?abstract",
-        "https://source.unsplash.com/random/300x300/?animals",
-        "https://source.unsplash.com/random/300x300/?cars",
-        "https://source.unsplash.com/random/300x300/?sports",
-        "https://source.unsplash.com/random/300x300/?food",
-        "https://source.unsplash.com/random/300x300/?travel"
+        "https://randomuser.me/api/portraits/men/4.jpg",
+        "https://randomuser.me/api/portraits/men/5.jpg",
+        "https://randomuser.me/api/portraits/men/6.jpg",
+        "https://randomuser.me/api/portraits/men/7.jpg",
+        "https://randomuser.me/api/portraits/men/8.jpg",
+        "https://randomuser.me/api/portraits/men/9.jpg",
+        "https://randomuser.me/api/portraits/men/10.jpg",
+        "https://randomuser.me/api/portraits/men/1.jpg",
       ]
       
   return (
@@ -19,13 +17,14 @@ const Photos = () => {
         <h2 className='text-xl'>Photos Of You</h2>
     <div className='grid mt-4 grid-cols-4 gap-4'>
     {images.slice(0,7).map((image:string,index:number)=>(
-       <div key={index} className='h-40 border  rounded-lg'>
-           <img src={image} alt="image" />
+       <div key={index} className='overflow-hidden border rounded-lg'>
+           <img src={image} alt="image" className='object-contain h-full w-full  hover:scale-110 transition-all duration-300 cursor-pointer'/>
        </div>
      ))}
+     <div className='h-full cursor-pointer bg-slate-400 rounded-lg border flex items-center justify-center text-2xl'>View All</div>
     </div>
    </div>
-  )
+  ) 
 }
 
 export default Photos
