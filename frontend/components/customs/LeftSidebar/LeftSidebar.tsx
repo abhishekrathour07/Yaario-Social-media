@@ -8,14 +8,12 @@ import { LogOut } from 'lucide-react' // Add this import at the top with other i
 
 const LeftSidebar = () => {
 
-
   const pathname = usePathname()
   const isActive = (path: string) => {
     return pathname === path ? 'border-l-4 border-purple-500 bg-slate-800' : ''
   }
 
   const handleLogout = () => {
-      // Add your logout logic here
       console.log("Logging out...")
   }
 
