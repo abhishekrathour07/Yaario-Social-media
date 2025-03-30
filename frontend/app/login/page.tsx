@@ -1,9 +1,9 @@
-import LoginSignUp from '@/components/screens/LoginSignup/LoginSignUp'
+import LoginHOC from '@/components/screens/Login/LoginHOC'
 import React from 'react'
 
 const page = () => {
   return (
-   <LoginSignUp/>
+    <LoginHOC/>
   )
 }
 
