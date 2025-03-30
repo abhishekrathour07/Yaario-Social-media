@@ -29,16 +29,8 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        <div className="flex h-screen overflow-hidden">
-          <div className="w-80 flex-shrink-0">
-            <LeftSidebar />
-          </div>
-          <div className="w-[59vw]">
-            {children}
-          </div>
-          <div className="w-80 flex-shrink-0 ">
-            <RightSidebar />
-          </div>
+        <div>
+          {children}
         </div>
       </body>
     </html>

@@ -46,7 +46,7 @@ const Home = () => {
         <div className='bg-slate-900 h-screen p-4 text-white overflow-y-scroll no-scrollbar flex flex-col gap-4'>
             <CreatePost />
             <div>
-            <Stories />
+                <Stories />
             </div>
             <div>
                 {posts.map((post, index) => (
