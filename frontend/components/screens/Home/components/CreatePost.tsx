@@ -1,12 +1,12 @@
 "use client"
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
-import { Images, Laugh, Video, Upload} from 'lucide-react'
+import { Images, Laugh, Video} from 'lucide-react'
 import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import UploadFile from '@/components/customs/UploadFile/UploadFile'
+import EmojiPicker from '@/components/customs/EmojiPicker/EmojiPicker'
 
 type CreatePostProps = {
     imageUrl?: string | null,
@@ -17,6 +17,12 @@ const CreatePost: React.FC<CreatePostProps> = ({
     imageUrl = null,
     name = "Abhishek Singh"
 }) => {
+   
+    const [caption, setCaption] = useState("");
+    const handleEmojiSelect = (emoji: any) => {
+        setCaption(prev => prev + emoji.native);
+    };
+
     return (
         <div className='text-white bg-slate-800 rounded-lg flex flex-col gap-4 p-4'>
             <div className='flex gap-4 items-center'>
@@ -59,7 +65,15 @@ const CreatePost: React.FC<CreatePostProps> = ({
                         <DialogHeader>
                             <DialogTitle>Upload Photo/Video</DialogTitle>
                         </DialogHeader>
-                        <Input placeholder='Write a Caption' className='border-none ' />
+                        <div className='flex justify-between'>
+                            <Input 
+                                placeholder='Write a Caption' 
+                                className='border-none'
+                                value={caption}
+                                onChange={(e) => setCaption(e.target.value)}
+                            />
+                            <EmojiPicker onEmojiSelect={handleEmojiSelect} />
+                        </div>
                         <UploadFile />
                     </DialogContent>
                 </Dialog>
@@ -75,7 +89,10 @@ const CreatePost: React.FC<CreatePostProps> = ({
                             <DialogTitle>Write Something on timeLine</DialogTitle>
                         </DialogHeader>
                         <div className='flex flex-col gap-4'>
-                            <textarea className='w-full h-20 outline-0 ring-0 text-xl' placeholder='Write Something' />
+                            <div>
+                            <textarea className='w-full h-20 outline-0 ring-0 text-xl' placeholder='Write Something' value={caption} onChange={(e)=>setCaption(e.target.value)}/>
+                            <EmojiPicker onEmojiSelect={handleEmojiSelect} />
+                            </div>
                            <div className='flex justify-end'>
                            <CustomButton text='Upload'></CustomButton>
                            </div>

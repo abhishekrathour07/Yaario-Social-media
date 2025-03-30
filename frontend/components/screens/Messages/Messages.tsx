@@ -13,10 +13,12 @@ const Messages = () => {
   return (
     <div className="flex  h-screen bg-slate-900 text-white overflow-hidden">
       {/* Message List Section */}
+        <div className='w-1/3'>
         <MessageList
           selectedChat={selectedChat}
           onSelectChat={setSelectedChat}
         />
+        </div>
 
       {/* Chat Window Section */}
       <div className="flex-1 flex flex-col">
