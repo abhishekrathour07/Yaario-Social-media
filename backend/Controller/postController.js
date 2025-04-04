@@ -29,8 +29,6 @@ const createPost = async (req, res) => {
         });
 
         await newPost.save();
-        console.log("New Post Created:", newPost);
-
         return responseHandler(res, 200, "Post created successfully", newPost);
 
     } catch (error) {
