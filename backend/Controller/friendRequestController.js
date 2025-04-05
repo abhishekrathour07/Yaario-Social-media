@@ -31,6 +31,31 @@ const sendRequest = async (req, res) => {
     }
 };
 
+const acceptFriendRequest = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        const friendId = req.params.friendId;
+        const friendRequest = await friendRequestModal.findOne({
+            $or: [
+                { sender: userId, receiver: friendId },
+                { sender: friendId, receiver: userId }
+            ]
+        });
+        if (!friendRequest) {
+            return responseHandler(res, 400, "Friend Request Not Found");
+        }
+        if (friendRequest.status!== "pending") {
+            return responseHandler(res, 400, "Friend Request Already Accepted");
+        }
+        friendRequest.status = "accepted";
+        await friendRequest.save();
+        return responseHandler(res, 200, "Friend Request Accepted");
+
+    } catch (error) {
+        console.log(error);
+        return responseHandler(res, 500, "Internal Server Error");
+    }
+}
 
 const cancelFriendRequest = async (req, res) => {
     try {
@@ -41,7 +66,7 @@ const cancelFriendRequest = async (req, res) => {
                 { sender: userId, receiver: friendId },
                 { sender: friendId, receiver: userId }
             ]
-        }); 
+        });
         if (!friendRequest) {
             return responseHandler(res, 400, "Friend Request Not Found");
         }
@@ -54,7 +79,7 @@ const cancelFriendRequest = async (req, res) => {
         console.log(error);
         return responseHandler(res, 500, "Internal Server Error");
     }
-};  
+};
 
 export {
     sendRequest,
