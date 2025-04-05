@@ -15,7 +15,7 @@ const FriendRequest = () => {
           See All
         </button>
       </div>
-      <div className='grid grid-cols-2 gap-4 mt-4 mb-4'>
+      <div className='grid md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-4 mt-4 mb-4'>
         {
           friendRequestData.slice(0,10).map((list, index: number) => (
             <div key={index}>
@@ -29,14 +29,15 @@ const FriendRequest = () => {
           ))
         }
       </div>
-      <div className='mt-4 border-t border-gray-400'>
+      <div className=' border-gray-500 mt-12 border-[1px]'></div>
+      <div className='mt-4 '>
        <div className='flex justify-between items-center px-2'>
        <h1 className='text-2xl text-white font-semibold'>People You May Know</h1>
        <button className="text-blue-500 hover:text-blue-400 cursor-pointer mt-4 text-lg">
           See All
         </button>
        </div>
-        <div className='grid grid-cols-2 gap-4 mt-4'>
+        <div className='grid md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-4 mt-4 mb-4'>
         { friendRequestData.slice(0,10).map((list, index: number) => (
             <div key={index}>
               <FriendSuggestionCards

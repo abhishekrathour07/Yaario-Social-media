@@ -16,10 +16,9 @@ const RightSidebar = () => {
     let year = d.getFullYear();
 
     return (
-        <div className="w-80 h-screen bg-slate-800 p-6 text-white overflow-y-auto">
+        <div className="h-screen w-auto bg-slate-800 text-white p-4 relative ">
             <div className="flex flex-col h-full">
                 <SearchBox />
-
                 {/* Who to Connect Section */}
                 <div className="flex-1">
                     <h2 className="text-xl font-semibold mb-4">Who to Connect</h2>

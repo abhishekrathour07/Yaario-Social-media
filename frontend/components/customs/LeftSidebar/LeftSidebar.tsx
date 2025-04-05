@@ -18,7 +18,7 @@ const LeftSidebar = () => {
   }
 
   return (
-    <div className="h-screen w-80 bg-slate-800 text-white p-4 relative">
+    <div className="h-screen w-auto bg-slate-800 text-white p-4 relative">
       <div className="flex flex-col space-y-4">
         <div className="text-2xl font-bold mb-8">
           Yaario
