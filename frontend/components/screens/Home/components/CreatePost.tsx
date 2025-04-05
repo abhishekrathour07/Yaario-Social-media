@@ -1,7 +1,7 @@
 "use client"
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
-import { Images, Laugh, Video} from 'lucide-react'
+import { Images, Laugh, Video } from 'lucide-react'
 import React, { useState } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import CustomButton from '@/components/customs/CustomButton/CustomButton'
@@ -17,7 +17,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
     imageUrl = null,
     name = "Abhishek Singh"
 }) => {
-   
+
     const [caption, setCaption] = useState("");
     const handleEmojiSelect = (emoji: any) => {
         setCaption(prev => prev + emoji.native);
@@ -40,10 +40,11 @@ const CreatePost: React.FC<CreatePostProps> = ({
             <div className='flex items-center justify-between  px-4'>
                 <Dialog>
                     <DialogTrigger asChild>
-                        <div className='flex gap-2 cursor-pointer'>
-                            <Video className='text-red-500 ' />
-                            Live Video
+                        <div className='flex sm:flex-col gap-2 cursor-pointer'>
+                            <Video className='text-red-500' />
+                            <span>Live Video</span>
                         </div>
+
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px] bg-slate-800 text-white">
                         <DialogHeader>
@@ -66,8 +67,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
                             <DialogTitle>Upload Photo/Video</DialogTitle>
                         </DialogHeader>
                         <div className='flex justify-between'>
-                            <Input 
-                                placeholder='Write a Caption' 
+                            <Input
+                                placeholder='Write a Caption'
                                 className='border-none'
                                 value={caption}
                                 onChange={(e) => setCaption(e.target.value)}
@@ -90,12 +91,12 @@ const CreatePost: React.FC<CreatePostProps> = ({
                         </DialogHeader>
                         <div className='flex flex-col gap-4'>
                             <div>
-                            <textarea className='w-full h-20 outline-0 ring-0 text-xl' placeholder='Write Something' value={caption} onChange={(e)=>setCaption(e.target.value)}/>
-                            <EmojiPicker onEmojiSelect={handleEmojiSelect} />
+                                <textarea className='w-full h-20 outline-0 ring-0 text-xl' placeholder='Write Something' value={caption} onChange={(e) => setCaption(e.target.value)} />
+                                <EmojiPicker onEmojiSelect={handleEmojiSelect} />
                             </div>
-                           <div className='flex justify-end'>
-                           <CustomButton text='Upload'></CustomButton>
-                           </div>
+                            <div className='flex justify-end'>
+                                <CustomButton text='Upload'></CustomButton>
+                            </div>
                         </div>
                     </DialogContent>
                 </Dialog>
