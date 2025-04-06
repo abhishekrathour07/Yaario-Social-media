@@ -22,10 +22,9 @@ const Login = () => {
     },
   })
 
-  const onSubmit = (values:loginFormType ) => {
-    console.log(values)
+  const onSubmit = (data:loginFormType ) => {
+    console.log(data) 
   }
-
   return (
     <div className='bg-gradient-to-r from-blue-500 to-teal-500 h-[100vh] flex justify-center items-center'>
       <div className='p-8 bg-slate-800 text-white rounded-lg shadow-lg w-96 space-y-6 border border-slate-700'>
