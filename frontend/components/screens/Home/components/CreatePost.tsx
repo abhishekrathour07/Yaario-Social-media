@@ -40,9 +40,9 @@ const CreatePost: React.FC<CreatePostProps> = ({
             <div className='flex items-center justify-between  px-4'>
                 <Dialog>
                     <DialogTrigger asChild>
-                        <div className='flex sm:flex-col gap-2 cursor-pointer'>
+                        <div className='flex cursor-pointer gap-2'>
                             <Video className='text-red-500' />
-                            <span>Live Video</span>
+                            <span className='hidden sm:block'>Live Video</span>
                         </div>
 
                     </DialogTrigger>
@@ -59,7 +59,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                     <DialogTrigger asChild>
                         <div className='flex gap-2 cursor-pointer'>
                             <Images className='text-green-500' />
-                            photo/Video
+                           <span className='hidden sm:block'>photo/Video</span> 
                         </div>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px] bg-slate-800 text-white">
@@ -82,7 +82,7 @@ const CreatePost: React.FC<CreatePostProps> = ({
                     <DialogTrigger asChild>
                         <div className='flex gap-2 cursor-pointer'>
                             <Laugh className='text-orange-400' />
-                            Feeling/Activity
+                            <span className='sm:block hidden'>Feeling/Activity</span>
                         </div>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px] bg-slate-800 text-white">
