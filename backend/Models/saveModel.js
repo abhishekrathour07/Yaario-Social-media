@@ -1,12 +1,12 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-const friendSuggestionSchema = new mongoose.Schema(
+const savedSchema = new mongoose.Schema(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         },
-        suggestion: [
+        saved: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User"
@@ -17,8 +17,4 @@ const friendSuggestionSchema = new mongoose.Schema(
         timestamps: true,
         getter: true
     }
-)
-
-
-const suggestionModel = mongoose.model('suggestion', friendSuggestionSchema);
-export default suggestionModel
+);

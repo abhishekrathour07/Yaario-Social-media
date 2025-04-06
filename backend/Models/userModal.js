@@ -5,14 +5,14 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isPrivate: { type: Boolean, default: false },
-    avatar: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+    avatar: { type: String, default: null },
+    coverImage: { type: String, default: null },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    bio: { type: String },
+    followings: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 },
     {
         timestamps: true,
-        getters: true
+        toJSON: { getters: true }
     })
 
 const userModal = mongoose.model("User", userSchema);
