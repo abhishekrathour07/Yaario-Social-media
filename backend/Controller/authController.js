@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import userModal from '../Models/userModal.js'
 import responseHandler from '../utils/responseHandler.js';
+import bioModal from '../Models/BioModel.js';
 
 export const signup = async (req, res) => {
     try {
@@ -16,6 +17,11 @@ export const signup = async (req, res) => {
         newUser.password = await bcrypt.hash(password, 10);
         await newUser.save();
 
+        // default values will auto apply
+        const newBio = await bioModal.create({
+            user: newUser._id
+        });
+        await newBio.save()
         res.status(200).json({
             message: "Signup Successfully, you can login now",
             success: true,

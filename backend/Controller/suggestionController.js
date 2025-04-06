@@ -16,7 +16,7 @@ const getLoginUserDetail = async (req, res) => {
 const friendSuggestion = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
-
+      
         const loggedInUser = await userModal.findById(loggedInUserId).select("followings followers");
         if (!loggedInUser) {
             return responseHandler(res, 404, "user data not found please check the userId");

@@ -5,11 +5,11 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     isPrivate: { type: Boolean, default: false },
+    bio: { type: mongoose.Schema.Types.ObjectId, ref: "Bio" },
     avatar: { type: String, default: null },
     coverImage: { type: String, default: null },
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     followings: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-    bio: { type: mongoose.Schema.Types.ObjectId, ref: "Bio" }
 },
     {
         timestamps: true,
