@@ -9,6 +9,7 @@ import authMiddleware from './Middleware/Authentication.js';
 import SuggestionRouter from './Routes/suggestion.js';
 import requestRouter from './Routes/request.js';
 import bioRouter from './Routes/bioRoutes.js';
+import likeRouter from './Routes/likeRouter.js';
 
 dotenv.config()
 
@@ -26,6 +27,7 @@ app.use('/api/v1', Authrouter); // authentication routers
 app.use('/api/v1', authMiddleware, postRouter) // post routers
 app.use('/api/v1', authMiddleware, SuggestionRouter) //suggestions Routers
 app.use('/api/v1', authMiddleware, bioRouter) //Bio details Routers
+app.use('/api/v1', authMiddleware, likeRouter)
 
 
 app.use('/api/v1', authMiddleware, requestRouter)
