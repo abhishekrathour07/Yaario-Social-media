@@ -11,6 +11,7 @@ import requestRouter from './Routes/request.js';
 import bioRouter from './Routes/bioRoutes.js';
 import likeRouter from './Routes/likeRouter.js';
 import commentRouter from './Routes/commentRouter.js';
+import shareRouter from './Routes/shareRoutes.js';
 
 dotenv.config()
 
@@ -30,9 +31,8 @@ app.use('/api/v1', authMiddleware, SuggestionRouter) //suggestions Routers
 app.use('/api/v1', authMiddleware, bioRouter) //Bio details Routers
 app.use('/api/v1', authMiddleware, likeRouter) //like and dislike on post
 app.use('/api/v1', authMiddleware, commentRouter) //comment and delete comment on post
-
-
-app.use('/api/v1', authMiddleware, requestRouter)
+app.use('/api/v1', authMiddleware, shareRouter) //comment and delete comment on post
+app.use('/api/v1', authMiddleware, requestRouter)//share a post Routes
 
 app.listen(PORT, () => (
     console.log("Server is Running at Port " + PORT)

@@ -52,7 +52,6 @@ const deleteComment = async (req, res) => {
         }
 
         const comment = post.comment.find(comment => comment._id.toString() === commentId.toString());
-       
         if (!comment) {
             return responseHandler(res, 404, "Comment not found");
         }
