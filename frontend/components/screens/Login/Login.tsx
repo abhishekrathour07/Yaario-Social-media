@@ -9,6 +9,7 @@ import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import { LoginValidationSchema } from './validation/LoginValidationSchema'
 import { authService, LoginData } from '@/services/auth.service'
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation'
 
 
 const Login = () => {
@@ -19,11 +20,13 @@ const Login = () => {
       password: ''
     },
   })
-
+const router = useRouter();
   const onSubmit = async (data: LoginData) => {
     try {
       const response = await authService.login(data);
       toast.success(response?.message);
+      router.push('/home')
+
     } catch (error: any) {
       console.log(error);
       toast.error(error?.response?.data?.message);

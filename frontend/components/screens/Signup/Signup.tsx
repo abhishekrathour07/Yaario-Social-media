@@ -9,6 +9,7 @@ import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import { SignupValidationSchema } from './validation/SignupValidationSchema'
 import { authService, SignupData } from '@/services/auth.service'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 
 
@@ -21,11 +22,12 @@ const Signup = () => {
             password: ''
         },
     })
-
+    const router = useRouter();
     const onSubmit = async (data: SignupData) => {
         try {
             const response = await authService.signup(data);
             toast.success(response?.message);
+            router.push('/login');
         } catch (error: any) {
             console.log(error);
             toast.error(error?.response?.data?.message);

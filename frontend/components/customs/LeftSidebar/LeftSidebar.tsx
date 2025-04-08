@@ -1,10 +1,12 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { redirect, usePathname, useRouter } from 'next/navigation'
 import { Home, UserPlus, Bell, Settings, User, Save, MessageCircle } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { LogOut } from 'lucide-react' // Add this import at the top with other imports
+import { authService } from '@/services/auth.service'
+import { toast } from 'sonner'
 
 const LeftSidebar = () => {
 
@@ -12,10 +14,17 @@ const LeftSidebar = () => {
   const isActive = (path: string) => {
     return pathname === path ? 'border-l-4 border-purple-500 bg-slate-800' : ''
   }
-
-  const handleLogout = () => {
-      console.log("Logging out...")
+ const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      const response = await authService.logout();
+      toast.success(response?.message)
+      router.push('/login')
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Something went wrong');
+    }
   }
+
 
   return (
     <div className="h-screen w-auto bg-slate-800 text-white p-4 relative">
