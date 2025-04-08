@@ -26,7 +26,7 @@ app.use(express.json())
 
 // These are the all router detail
 
-app.use('/api/v1', Authrouter); // authentication routers
+app.use('/api/v1/auth', Authrouter); // authentication routers
 app.use('/api/v1', authMiddleware, postRouter) // post routers
 app.use('/api/v1', authMiddleware, SuggestionRouter) //suggestions Routers
 app.use('/api/v1', authMiddleware, bioRouter) //Bio details Routers

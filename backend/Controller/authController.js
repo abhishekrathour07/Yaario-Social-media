@@ -22,17 +22,10 @@ export const signup = async (req, res) => {
             user: newUser._id
         });
         await newBio.save()
-        res.status(200).json({
-            message: "Signup Successfully, you can login now",
-            success: true,
-        })
+        responseHandler(res, 201, "User created successfully");
 
     } catch (error) {
-        console.log("Error while creating Yaario Account", error);
-        res.status(500).json({
-            message: "Server Error",
-            success: false,
-        })
+        return responseHandler(res, 500, "Internal Server Error", error)
     }
 }
 
@@ -43,20 +36,12 @@ export const login = async (req, res) => {
         const existUser = await userModal.findOne({ email });
 
         if (!existUser) {
-            console.log("User not found");
-            return res.status(404).json({
-                message: "User not found",
-                success: false,
-            });
+            responseHandler(res, 404, "User not found");
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, existUser.password);
         if (!isPasswordCorrect) {
-            console.log("Incorrect password");
-            return res.status(403).json({
-                message: "Password is incorrect",
-                success: false,
-            });
+            return responseHandler(res, 401, "Incorrect password");
         }
 
         const token = jwt.sign(
@@ -65,24 +50,23 @@ export const login = async (req, res) => {
             { expiresIn: "24h" }
         );
 
-        console.log("Generated Token:", token);
-
         res.cookie('auth_token', token, {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
         });
-
-        res.status(200).json({
-            message: "Login Successfully",
-            success: true,
+        responseHandler(res, 200, "Login Successfully", {
+            token,
             name: existUser.name,
-            userId: existUser._id
-        });
+            userId: existUser._id,
+            avatar: existUser.avatar
+        })
+
     } catch (error) {
-        res.status(500).json({
-            message: "Server Error",
-            success: false,
-            error: error.message
-        });
+        responseHandler(res, 500, "Internal Server Error", error)
     }
+};
+
+export const logout = (req, res) => {
+    res.clearCookie('auth_token');
+    res.status(200).json({ message: 'Logged out successfully' });
 };
