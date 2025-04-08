@@ -7,14 +7,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import { LoginValidationSchema } from './validation/LoginValidationSchema'
+import { authService, LoginData } from '@/services/auth.service'
+import { toast } from 'sonner';
 
 
-type loginFormType = {
-  email: string;
-  password: string;
-}
 const Login = () => {
-  const form = useForm<loginFormType>({
+  const form = useForm<LoginData>({
     resolver: zodResolver(LoginValidationSchema),
     defaultValues: {
       email: '',
@@ -22,9 +20,15 @@ const Login = () => {
     },
   })
 
-  const onSubmit = (data:loginFormType ) => {
-    console.log(data) 
-  }
+  const onSubmit = async (data: LoginData) => {
+    try {
+      const response = await authService.login(data);
+      toast.success(response?.message);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error?.response?.data?.message);
+    }
+  };
   return (
     <div className='bg-gradient-to-r from-blue-500 to-teal-500 h-[100vh] flex justify-center items-center'>
       <div className='p-8 bg-slate-800 text-white rounded-lg shadow-lg w-96 space-y-6 border border-slate-700'>
@@ -38,11 +42,11 @@ const Login = () => {
                 <FormItem>
                   <FormLabel className="text-gray-300">Email</FormLabel>
                   <FormControl>
-                    <Input 
-                      type="email" 
-                      placeholder='Enter your email' 
+                    <Input
+                      type="email"
+                      placeholder='Enter your email'
                       className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className='text-sm text-red-400' />
@@ -56,18 +60,18 @@ const Login = () => {
                 <FormItem>
                   <FormLabel className="text-gray-300">Password</FormLabel>
                   <FormControl>
-                    <Input 
-                      type="password" 
-                      placeholder='Enter your password' 
+                    <Input
+                      type="password"
+                      placeholder='Enter your password'
                       className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage className='text-sm text-red-400' />
                 </FormItem>
               )}
             />
-           <CustomButton text='Login' onClick={form.handleSubmit(onSubmit)} className='w-full'>
+            <CustomButton text='Login' onClick={form.handleSubmit(onSubmit)} className='w-full'>
             </CustomButton>
             <div className='text-center text-sm'>
               <span className='text-gray-400'>Don't have an account? </span>

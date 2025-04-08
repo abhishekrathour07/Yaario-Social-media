@@ -43,12 +43,12 @@ const Home = () => {
     ];
 
     return (
-        <div className='bg-slate-900 h-screen p-4 text-white overflow-y-scroll no-scrollbar flex flex-col gap-4'>
+        <div className='bg-slate-900 h-screen py-4 sm:px-6 px-2 xl:px-16 text-white overflow-y-scroll no-scrollbar flex flex-col gap-4'>
             <CreatePost />
             <div>
                 <Stories />
             </div>
-            <div>
+            <div className='flex flex-col gap-4'>
                 {posts.map((post, index) => (
                     <ViewPost key={index} {...post} />
                 ))}

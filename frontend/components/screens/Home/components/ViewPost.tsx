@@ -1,7 +1,8 @@
 "use client"
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import { Bookmark, Globe,  MessageCircle, Share2, ThumbsUp } from 'lucide-react'
+import { Bookmark, Globe, MessageCircle, Share2, ThumbsUp } from 'lucide-react'
 import React, { useState } from 'react'
+import Image from 'next/image';
 
 type ViewPostProps = {
     name: string,
@@ -21,67 +22,66 @@ const ViewPost: React.FC<ViewPostProps> = ({
     const [like, setLike] = useState(false)
     const [save, setSave] = useState(false)
     return (
-        <div className='bg-slate-800 rounded-lg p-4 mb-4'>
-            <div className='flex gap-4 items-center mb-4'>
-                <Avatar className="h-12 w-12">
+        <div className='bg-slate-800 rounded-lg overflow-hidden shadow-lg border border-slate-700'>
+            {/* Header */}
+            <div className='p-4 flex items-center gap-3'>
+                <Avatar className="h-10 w-10 ">
                     <AvatarImage
-                        src={ProfileUrl !== null
-                            ? ProfileUrl
-                            : `https://ui-avatars.com/api/?name=${name}`
-                        }
+                        src={ProfileUrl || `https://ui-avatars.com/api/?name=${name}`}
+                        className="object-cover"
                     />
                 </Avatar>
-                <div>
-                    <h2 className='hover:text-underline cursor-pointer font-semibold'>{name}</h2>
-                    <p className='text-gray-400 flex gap-2 text-sm items-center justify-center'> {timeStamp} <Globe className='h-4 w-4 mt-1' /></p>
+                <div className='flex-1'>
+                    <h2 className='font-semibold hover:underline cursor-pointer'>{name}</h2>
+                    <div className='flex items-center gap-2 text-sm text-gray-400'>
+                        <span>{timeStamp}</span>
+                        <Globe className='h-3.5 w-3.5' />
+                    </div>
                 </div>
             </div>
 
-            <div className='mb-4'>
-                <img
+            {/* Image */}
+            <div className='relative aspect-[3/2] bg-slate-900 w-full'>
+                <Image
                     src={postUrl}
-                    alt="Post content"
-                    className='w-full h-96'
+                    alt={`${name}'s post`}
+                    fill
+                    priority
+                    className='object-contain'
+                    quality={100}
                 />
             </div>
-            <p className='text-gray-400 px-4'>You and {likeCount} Other</p>
-            <div className='flex items-center justify-between px-4 py-2'>
-                <button className='cursor-pointer' onClick={() => setLike(!like)}>
-                    {like ?
-                        <div className='flex items-center gap-2 '>
-                            <ThumbsUp className='h-5 w-5' fill='#fff' />
-                            <span>Unlike</span>
-                        </div>
-                        :
-                        <div className='flex items-center gap-2 '>
-                            <ThumbsUp className='h-5 w-5' />
-                            <span>Like</span>
-                        </div>
 
-                    }
+            {/* Likes count */}
+            <div className='px-4 py-4 text-sm text-gray-400 border-b border-slate-700'>
+                {parseInt(likeCount) > 0 && `You and ${likeCount} others`}
+            </div>
 
+            {/* Action buttons */}
+            <div className='grid grid-cols-4 divide-x divide-slate-700'>
+                <button
+                    onClick={() => setLike(!like)}
+                    className='flex items-center cursor-pointer  justify-center gap-2 p-3 hover:bg-slate-700 transition-colors'
+                >
+                    <ThumbsUp className={`h-5 w-5 ${like ? 'fill-white' : ''}`} />
+                    <span className='text-sm'>{like ? 'Unlike' : 'Like'}</span>
                 </button>
-                <button className='flex items-center gap-2 '>
+
+                <button className='flex cursor-pointer  items-center justify-center gap-2 p-3 hover:bg-slate-700 transition-colors'>
                     <MessageCircle className='h-5 w-5' />
-                    <span>Comment</span>
+                    <span className='text-sm'>Comment</span>
                 </button>
-                <button className='flex items-center gap-2 '>
-                    <Share2 className='h-5 w-5' />
-                    <span>Share</span>
-                </button>
-                <button className='cursor-pointer' onClick={() => setSave(!save)}>
-                    {save ?
-                        <div className='flex gap-2 items-center'>
-                            <Bookmark className='h-5 w-5' fill='#fff' />
-                            <span>Unsave</span>
-                        </div>
-                        :
-                        <div className='flex gap-2 items-center'>
-                            <Bookmark className='h-5 w-5' />
-                            <span>Save</span>
-                        </div>
 
-                    }
+                <button className='flex cursor-pointer items-center justify-center gap-2 p-3 hover:bg-slate-700 transition-colors'>
+                    <Share2 className='h-5 w-5' />
+                    <span className='text-sm'>Share</span>
+                </button>
+                <button
+                    onClick={() => setSave(!save)}
+                    className='flex cursor-pointer items-center justify-center gap-2 p-3 hover:bg-slate-700 transition-colors'
+                >
+                    <Bookmark className={`h-5 w-5 ${save ? 'fill-white' : ''}`} />
+                    <span className='text-sm'>{save ? 'Unsave' : 'Save'}</span>
                 </button>
             </div>
         </div>

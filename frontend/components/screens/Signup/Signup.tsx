@@ -7,26 +7,30 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import { SignupValidationSchema } from './validation/SignupValidationSchema'
+import { authService, SignupData } from '@/services/auth.service'
+import { toast } from 'sonner'
 
 
-type SignupFormType = {
-    name: string,
-    email: string;
-    password: string;
-}
+
 const Signup = () => {
-    const form = useForm<SignupFormType>({
+    const form = useForm<SignupData>({
         resolver: zodResolver(SignupValidationSchema),
         defaultValues: {
-            name:"",
+            name: "",
             email: '',
             password: ''
         },
     })
 
-    const onSubmit = (values: SignupFormType) => {
-        console.log(values)
-    }
+    const onSubmit = async (data: SignupData) => {
+        try {
+            const response = await authService.signup(data);
+            toast.success(response?.message);
+        } catch (error: any) {
+            console.log(error);
+            toast.error(error?.response?.data?.message);
+        }
+    };
 
     return (
         <div className='bg-gradient-to-r from-blue-500 to-teal-500 h-[100vh] flex justify-center items-center'>
