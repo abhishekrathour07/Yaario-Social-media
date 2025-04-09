@@ -23,7 +23,20 @@ const postServices = {
             withCredentials: true,
         });
         return response.data;
+    },
+    likePost: async (postId: string) => {
+        const response = await axios.put(`${API_URL}/post/like`, { postId }, {
+            withCredentials: true
+        });
+        return response.data;
+    },
+
+    addComment: async (postId: string, data: { comment: string }) => {
+        const response = await axios.post(`${API_URL}/comment/${postId}`, data, {
+            withCredentials: true
+        });
+        return response.data;
     }
-}
+};
 
 export default postServices;

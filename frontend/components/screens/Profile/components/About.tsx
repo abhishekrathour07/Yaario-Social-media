@@ -1,125 +1,136 @@
 "use client"
 import CustomButton from '@/components/customs/CustomButton/CustomButton'
+import Loader from '@/components/customs/Loader/Loader'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
+import bioServices, { aboutType } from '@/services/bio.service'
+import { useUserStore } from '@/store/userStore'
 import { Edit } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-
+import { toast } from 'sonner'
 
 const About = () => {
   const [isEditing, setIsEditing] = useState(false)
-  const [aboutData, setAboutData] = useState({
-    work: "Software Engineer at Tech Corp",
-    education: "Computer Science Graduate",
-    location: "New York, USA",
-    relationship: "Single"
+  const [data, setData] = useState<aboutType | null>(null)
+  const { userId, name } = useUserStore();
+
+
+  const fetchUser = async () => {
+    const data = await useUserStore.getState().fetchUserDetails();
+
+  };
+
+  const form = useForm<aboutType>({
+    defaultValues: {
+      work: '',
+      education: '',
+      location: '',
+      relationshipStatus: '',
+    },
   })
 
-  const form = useForm<any>({
-    defaultValues: aboutData
-  })
+  const fetchBioData = async () => {
+    try {
+      const response = await bioServices.getBioDetail()
+      const bio = response?.data
+      setData(bio)
+      form.reset(bio)
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed to fetch bio data")
+    }
+  }
 
-  function onSubmit(values: any) {
-    setAboutData(values)
-    setIsEditing(false)
+  useEffect(() => {
+    fetchBioData()
+    fetchUser()
+  }, [])
+
+  const onSubmit = async (values: aboutType) => {
+    try {
+      const response = await bioServices.editBioData(values)
+      toast.success(response?.message || "Bio updated successfully")
+      setData(values)
+      setIsEditing(false)
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Update failed")
+    }
   }
 
   return (
     <div className='bg-slate-800 rounded-lg p-6 relative'>
-      <Button 
-        variant="ghost" 
-        size="icon" 
-        className='absolute top-4 right-4'
-        onClick={() => setIsEditing(!isEditing)}
-      >
-        <Edit className='h-5 w-5' />
-      </Button>
+      {!data ?
+        <div className='flex items-center h-[40vh] justify-center'>
+          <Loader />
+        </div> :
+        <div>
+          {userId === data?.user && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className='absolute top-4 right-4'
+              onClick={() => setIsEditing(!isEditing)}
+            >
+              <Edit className='h-5 w-5' />
+            </Button>
+          )}
 
-      {!isEditing ? (
-        <div className='space-y-4'>
-          <div>
-            <h3 className='text-gray-400'>Work</h3>
-            <p>{aboutData.work}</p>
-          </div>
-          <div>
-            <h3 className='text-gray-400'>Education</h3>
-            <p>{aboutData.education}</p>
-          </div>
-          <div>
-            <h3 className='text-gray-400'>Location</h3>
-            <p>{aboutData.location}</p>
-          </div>
-          <div>
-            <h3 className='text-gray-400'>Relationship Status</h3>
-            <p>{aboutData.relationship}</p>
-          </div>
-        </div>
-      ) : (
-        <Form {...form}>
-          <div className='space-y-4'>
-            <FormField
-              control={form.control}
-              name="work"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Work</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your work" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          {!isEditing ? (
+            <div className='space-y-4'>
+              <div>
+                <h3 className='text-gray-400'>Work</h3>
+                <p>{data?.work || 'Not provided'}</p>
+              </div>
+              <div>
+                <h3 className='text-gray-400'>Education</h3>
+                <p>{data?.education || 'Not provided'}</p>
+              </div>
+              <div>
+                <h3 className='text-gray-400'>Location</h3>
+                <p>{data?.location || 'Not provided'}</p>
+              </div>
+              <div>
+                <h3 className='text-gray-400'>Relationship Status</h3>
+                <p>{data?.relationshipStatus || 'Not provided'}</p>
+              </div>
+            </div>
+          ) : (
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
 
-            <FormField
-              control={form.control}
-              name="education"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Education</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your education" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                {['work', 'education', 'location', 'relationshipStatus'].map((fieldName) => (
+                  <FormField
+                    key={fieldName}
+                    control={form.control}
+                    name={fieldName as keyof aboutType}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{fieldName.charAt(0).toUpperCase() + fieldName.slice(1)}</FormLabel>
+                        <FormControl>
+                          <Input placeholder={`Your ${fieldName}`} {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
 
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Location</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your location" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="relationship"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Relationship Status</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Your relationship status" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <CustomButton text='Save Changes' onClick={form.handleSubmit(onSubmit)}></CustomButton>
-          </div>
-        </Form>
-      )}
+                <div className='w-full flex gap-4 justify-end'>
+                  <CustomButton text='Save ' />
+                  <Button className='border bg-transparent hover:bg-transparent' onClick={() => setIsEditing(false)}>Cancel</Button>
+                </div>
+              </form>
+            </Form>
+          )}
+        </div>}
     </div>
   )
 }
