@@ -1,6 +1,5 @@
+import { API_URL } from '@/routesbackend';
 import axios from 'axios';
-
-const API_URL = 'http://localhost:4005/api/v1/auth';
 
 export interface LoginData {
     email: string;
@@ -15,21 +14,21 @@ export interface SignupData {
 
 export const authService = {
     login: async (data: LoginData) => {
-        const response = await axios.post(`${API_URL}/login`, data, {
+        const response = await axios.post(`${API_URL}/auth/login`, data, {
             withCredentials: true 
         });
         return response.data;
     },
 
     signup: async (data: SignupData) => {
-        const response = await axios.post(`${API_URL}/register`, data, {
+        const response = await axios.post(`${API_URL}/auth/register`, data, {
             withCredentials: true
         });
         return response.data;
     },
 
     logout: async () => {
-        const response = await axios.post(`${API_URL}/logout`, {}, {
+        const response = await axios.post(`${API_URL}/auth/logout`, {}, {
             withCredentials: true
         });
         return response.data;

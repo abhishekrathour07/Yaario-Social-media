@@ -1,60 +1,87 @@
 "use client"
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import { Bookmark, Globe, MessageCircle, Share2, ThumbsUp } from 'lucide-react'
+import { Bookmark, EllipsisVertical, Globe, MessageCircle, Share2, ThumbsUp } from 'lucide-react'
 import React, { useState } from 'react'
 import Image from 'next/image';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import postServices from '@/services/post.services';
+import { toast } from 'sonner';
+
+
 
 type ViewPostProps = {
-    name: string,
-    ProfileUrl: string | null,
-    postUrl: string,
-    likeCount: string,
-    timeStamp: string
+    postData: any
 }
 
 const ViewPost: React.FC<ViewPostProps> = ({
-    name,
-    ProfileUrl,
-    postUrl,
-    likeCount,
-    timeStamp
+    postData
 }) => {
     const [like, setLike] = useState(false)
     const [save, setSave] = useState(false)
+
+    const handledeletePost = async () => {
+        try {
+            const response = await postServices.deletePost(postData._id)
+            toast.success(response?.message)
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message)
+        }
+    }
+
     return (
         <div className='bg-slate-800 rounded-lg overflow-hidden shadow-lg border border-slate-700'>
             {/* Header */}
-            <div className='p-4 flex items-center gap-3'>
+            <div className='px-6 py-4 flex items-center gap-3'>
                 <Avatar className="h-10 w-10 ">
                     <AvatarImage
-                        src={ProfileUrl || `https://ui-avatars.com/api/?name=${name}`}
+                        src={postData?.avatar || `https://ui-avatars.com/api/?name=${postData?.userId?.name}`}
                         className="object-cover"
                     />
                 </Avatar>
-                <div className='flex-1'>
-                    <h2 className='font-semibold hover:underline cursor-pointer'>{name}</h2>
-                    <div className='flex items-center gap-2 text-sm text-gray-400'>
-                        <span>{timeStamp}</span>
-                        <Globe className='h-3.5 w-3.5' />
+                <div className='flex justify-between items-center w-full'>
+                    <div className='flex flex-col'>
+                        <h2 className='font-semibold hover:underline cursor-pointer'>{postData?.userId?.name}</h2>
+                        <div className='flex items-center gap-2 text-sm text-gray-400'>
+                            <span>{postData?.createdAt}</span>
+                            <Globe className='h-3.5 w-3.5' />
+                        </div>
                     </div>
+
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild className='relative hover:bg-slate-800 '>
+                            <EllipsisVertical className="cursor-pointer" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-40 bg-slate-700 absolute left-2 top-0" side="bottom" >
+                            <DropdownMenuItem className='text-red-500 ' onClick={handledeletePost}>delete</DropdownMenuItem>
+                            <DropdownMenuItem className='text-white' onClick={() => {}}>View profile</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
                 </div>
             </div>
-
-            {/* Image */}
-            <div className='relative aspect-[3/2] bg-slate-900 w-full'>
-                <Image
-                    src={postUrl}
-                    alt={`${name}'s post`}
-                    fill
-                    priority
-                    className='object-contain'
-                    quality={100}
-                />
+            <div className=' p-4'>
+                {postData?.caption}
             </div>
 
+            {
+                postData?.postImageUrl &&
+                (
+                    <div className='relative aspect-[3/2] bg-slate-900 w-full'>
+                        <Image
+                            src={postData?.postImageUrl}
+                            alt={`${name}'s post`}
+                            fill
+                            priority
+                            className='object-contain'
+                            quality={100}
+                        />
+                    </div>
+                )
+            }
             {/* Likes count */}
             <div className='px-4 py-4 text-sm text-gray-400 border-b border-slate-700'>
-                {parseInt(likeCount) > 0 && `You and ${likeCount} others`}
+                {parseInt(postData.likeCount) > 0 && `You and ${postData.likeCount - 1} others`}
             </div>
 
             {/* Action buttons */}
@@ -84,7 +111,7 @@ const ViewPost: React.FC<ViewPostProps> = ({
                     <span className='text-sm'>{save ? 'Unsave' : 'Save'}</span>
                 </button>
             </div>
-        </div>
+        </div >
     )
 }
 

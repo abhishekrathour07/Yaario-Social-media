@@ -3,10 +3,16 @@ import { Button } from '@/components/ui/button'
 import { Upload } from 'lucide-react'
 import React, { useState } from 'react'
 
-const UploadFile = () => {
-    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+type UploadFileProps = {
+    selectedFile?: File | null,
+    setSelectedFile: React.Dispatch<React.SetStateAction<File | null>>,
+}
+const UploadFile:React.FC<UploadFileProps> = ({
+    selectedFile,
+    setSelectedFile,
+}) => {
     const [preview, setPreview] = useState<string | null>(null)
-
+  
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
@@ -18,12 +24,7 @@ const UploadFile = () => {
             reader.readAsDataURL(file)
         }
     }
-
-    const handleUpload = () => {
-        if (selectedFile) {
-            console.log('Uploading file:', selectedFile)
-        }
-    }
+   
     return (
         <div className='flex flex-col gap-4 p-4'>
             <div className={`border-2 border-dashed border-slate-600 rounded-lg p-6 transition-all
@@ -52,13 +53,7 @@ const UploadFile = () => {
                     )}
                 </label>
             </div>
-            <Button
-                onClick={handleUpload}
-                disabled={!selectedFile}
-                className={`w-full bg-gradient-to-r from-blue-600 via-purple-700 to-pink-600 text-white disabled:cursor-not-allowed cursour-pointer`}
-            >
-                {selectedFile ? 'Upload File' : 'Select a file'}
-            </Button>
+            
         </div>
     )
 }

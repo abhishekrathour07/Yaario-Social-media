@@ -7,6 +7,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import UploadFile from '@/components/customs/UploadFile/UploadFile'
 import EmojiPicker from '@/components/customs/EmojiPicker/EmojiPicker'
+import { toast } from 'sonner';
+import postServices from '@/services/post.services'
 
 type CreatePostProps = {
     imageUrl?: string | null,
@@ -17,10 +19,52 @@ const CreatePost: React.FC<CreatePostProps> = ({
     imageUrl = null,
     name = "Abhishek Singh"
 }) => {
-
     const [caption, setCaption] = useState("");
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const [isPhotoDialogOpen, setIsPhotoDialogOpen] = useState<boolean>(false);
+    const [timelineopen, setTimelineopen] = useState<boolean>(false);
+
+
     const handleEmojiSelect = (emoji: any) => {
         setCaption(prev => prev + emoji.native);
+    };
+
+    const handlecreatePost = async () => {
+        try {
+            console.log(caption)
+            if (!selectedFile) {
+                return toast.error('Please select an image');
+            }
+            const formData = new FormData();
+            formData.append('caption', caption);
+            formData.append('postImageUrl', selectedFile);
+            const response = await postServices.createPost(formData);
+            toast.success(response?.message);
+            setCaption("")
+            setSelectedFile(null);
+            setIsPhotoDialogOpen(false)
+
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || 'Failed to create post');
+        }
+    };
+
+    const handleTimeline = async () => {
+        try {
+            console.log(caption)
+            const payload = {
+                caption: caption,
+                postImageUrl: null
+            }
+            const response = await postServices.createPost(payload as any);
+            toast.success(response?.message);
+            setCaption("")
+            setSelectedFile(null);
+            setTimelineopen(false)
+
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || 'Failed to create post');
+        }
     };
 
     return (
@@ -55,11 +99,11 @@ const CreatePost: React.FC<CreatePostProps> = ({
                         </div>
                     </DialogContent>
                 </Dialog>
-                <Dialog>
+                <Dialog open={isPhotoDialogOpen} onOpenChange={setIsPhotoDialogOpen}>
                     <DialogTrigger asChild>
                         <div className='flex gap-2 cursor-pointer'>
                             <Images className='text-green-500' />
-                           <span className='hidden sm:block'>photo/Video</span> 
+                            <span className='hidden sm:block'>photo/Video</span>
                         </div>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px] bg-slate-800 text-white">
@@ -75,10 +119,13 @@ const CreatePost: React.FC<CreatePostProps> = ({
                             />
                             <EmojiPicker onEmojiSelect={handleEmojiSelect} />
                         </div>
-                        <UploadFile />
+                        <UploadFile selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+                        <div className='flex w-full'>
+                            <CustomButton text='Upload' className='w-full' onClick={handlecreatePost}></CustomButton>
+                        </div>
                     </DialogContent>
                 </Dialog>
-                <Dialog>
+                <Dialog open={timelineopen} onOpenChange={setTimelineopen}>
                     <DialogTrigger asChild>
                         <div className='flex gap-2 cursor-pointer'>
                             <Laugh className='text-orange-400' />
@@ -94,9 +141,10 @@ const CreatePost: React.FC<CreatePostProps> = ({
                                 <textarea className='w-full h-20 outline-0 ring-0 text-xl' placeholder='Write Something' value={caption} onChange={(e) => setCaption(e.target.value)} />
                                 <EmojiPicker onEmojiSelect={handleEmojiSelect} />
                             </div>
-                            <div className='flex justify-end'>
-                                <CustomButton text='Upload'></CustomButton>
+                            <div className='flex w-full'>
+                                <CustomButton text='Upload' className='w-full' onClick={handleTimeline}></CustomButton>
                             </div>
+
                         </div>
                     </DialogContent>
                 </Dialog>
