@@ -10,7 +10,6 @@ const like = async (req, res) => {
         if (!post) {
             return responseHandler(res, 404, "Post not found");
         }
-
         // Check if user already liked
         const alreadyLiked = post.like.some(like => like.user.toString() === loggedInuserId.toString());
 

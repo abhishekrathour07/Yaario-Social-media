@@ -72,7 +72,7 @@ const deletePostById = async(req,res)=>{
 
 const getAllPosts = async (req, res) => {
     try {
-        const posts = await postModal.find().sort({createdAt:-1}).populate("userId", "name");
+        const posts = await postModal.find().sort({createdAt:-1}).populate("userId", "name avatar");
         return responseHandler(res, 200, "Posts fetched successfully", posts);
     } catch (error) {
         console.error("Error in getAllPosts:", error);

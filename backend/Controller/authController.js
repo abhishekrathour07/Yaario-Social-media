@@ -22,10 +22,10 @@ export const signup = async (req, res) => {
             user: newUser._id
         });
         await newBio.save()
-        responseHandler(res, 201, "User created successfully");
+       return responseHandler(res, 201, "User created successfully");
 
     } catch (error) {
-        return responseHandler(res, 500, "Internal Server Error", error)
+     responseHandler(res, 500, "Internal Server Error")
     }
 }
 
@@ -36,7 +36,7 @@ export const login = async (req, res) => {
         const existUser = await userModal.findOne({ email });
 
         if (!existUser) {
-            responseHandler(res, 404, "User not found");
+            return responseHandler(res, 404, "User not found");
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, existUser.password);
@@ -54,19 +54,18 @@ export const login = async (req, res) => {
             httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
         });
-        responseHandler(res, 200, "Login Successfully", {
-            token,
+        return responseHandler(res, 200, "Login Successfully", {
             name: existUser.name,
             userId: existUser._id,
             avatar: existUser.avatar
         })
 
     } catch (error) {
-        responseHandler(res, 500, "Internal Server Error", error)
+        return responseHandler(res, 500, "Internal Server Error", error)
     }
 };
 
 export const logout = (req, res) => {
     res.clearCookie('auth_token');
-    res.status(200).json({ message: 'Logged out successfully' });
+    responseHandler(res, 200, "Logout Successfully");
 };

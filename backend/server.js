@@ -21,7 +21,10 @@ const PORT = 4005;
 
 connectedDB()
 app.use(cookieParser())
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 app.use(express.json())
 
 // These are the all router detail
