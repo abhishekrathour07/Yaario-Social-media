@@ -59,7 +59,6 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
         const newLikedState = !liked;
         setLiked(newLikedState);
         setLikeCount((prev: any) => prev + (newLikedState ? 1 : -1));
-
         try {
             const response = await postServices.likePost(postData._id);
             toast.success(response?.message);
@@ -67,6 +66,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
             toast.error(error?.response?.data?.message);
         }
     };
+
     const handleComment = async () => {
         try {
             if (!comment.trim()) return;
@@ -103,6 +103,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
         try {
             const response = await savePostServices.saveUnsavePost(postData._id);
             toast.success(response?.message);
+            setSave(!save)
         } catch (error: any) {
             toast.error(error?.response?.data?.message);
         }
@@ -225,10 +226,10 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
                 </Drawer>
 
                 <button
-                    onClick={() => setSave(!save)}
+                    onClick={handleSavePost}
                     className="flex cursor-pointer items-center justify-center gap-2 p-3 hover:bg-slate-700 transition-colors"
                 >
-                    <Bookmark onClick={handleSavePost} className={`h-5 w-5 ${save ? "fill-white" : ""}`} />
+                    <Bookmark  className={`h-5 w-5 ${save ? "fill-white" : ""}`} />
                     <span className="text-sm">{save ? "Unsave" : "Save"}</span>
                 </button>
             </div>
