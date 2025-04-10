@@ -25,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { useUserStore } from "@/store/userStore";
 import EmojiPicker from "@/components/customs/EmojiPicker/EmojiPicker";
 import { DialogTitle } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 
 type ViewPostProps = {
     postData: any;
@@ -41,7 +42,8 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
     const [commentData, setCommentData] = useState([]);
     const [save, setSave] = useState(postData?.isSaved || false);
     const [postLink, setPostLink] = useState("");
-
+    
+    const router = useRouter()
     useEffect(() => {
         if (typeof window !== "undefined") {
             setPostLink(`${window.location.origin}/post/${postData?._id}`);
@@ -117,7 +119,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
                 </Avatar>
                 <div className="flex justify-between items-center w-full">
                     <div className="flex flex-col">
-                        <h2 className="font-semibold hover:underline cursor-pointer">
+                        <h2 className="font-semibold hover:underline cursor-pointer" onClick={()=>{router.push(`/profile/${postData?.userId?._id}`)}}>
                             {postData?.userId?.name}
                         </h2>
                         <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -131,9 +133,14 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
                             <EllipsisVertical className="cursor-pointer" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent className="w-40 bg-slate-700 absolute left-2 top-0" side="bottom">
-                            <DropdownMenuItem className="text-red-500" onClick={handledeletePost}>
-                                Delete
-                            </DropdownMenuItem>
+                            {userId === postData?.userId?._id && (
+                                <DropdownMenuItem
+                                    className="text-white"
+                                    onClick={handledeletePost}
+                                >
+                                    Delete Post
+                                </DropdownMenuItem>
+                            )}
                             <DropdownMenuItem className="text-white">View profile</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

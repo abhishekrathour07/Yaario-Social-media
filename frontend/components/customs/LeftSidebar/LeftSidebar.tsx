@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { LogOut } from 'lucide-react' // Add this import at the top with other imports
 import { authService } from '@/services/auth.service'
 import { toast } from 'sonner'
+import { useUserStore } from '@/store/userStore'
 
 const LeftSidebar = () => {
 
@@ -14,7 +15,8 @@ const LeftSidebar = () => {
   const isActive = (path: string) => {
     return pathname === path ? 'border-l-4 border-purple-500 bg-slate-800' : ''
   }
- const router = useRouter();
+  const router = useRouter();
+  const { name, profileUrl,email } = useUserStore()
   const handleLogout = async () => {
     try {
       const response = await authService.logout();
@@ -78,14 +80,14 @@ const LeftSidebar = () => {
           <div className='flex items-center gap-3'>
             <Avatar className='h-10 w-10'>
               <AvatarImage
-                src={`https://ui-avatars.com/api/?name=${"Abhishek Singh"}`}
+                src={profileUrl !== null ? profileUrl : `https://ui-avatars.com/api/?name=${name}`}
                 alt="profile image"
               />
-              <AvatarFallback>AS</AvatarFallback>
+              <AvatarFallback>user</AvatarFallback>
             </Avatar>
             <div className='flex flex-col'>
-              <p className='text-sm font-medium'>Abhishek Singh</p>
-              <p className='text-xs text-gray-400'>@abhishek</p>
+              <p className='text-sm font-medium'>{name}</p>
+              <p className='text-xs text-gray-400'>{email}</p>
             </div>
           </div>
           <button

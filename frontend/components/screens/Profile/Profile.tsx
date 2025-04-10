@@ -1,59 +1,45 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { Camera } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import About from './components/About'
 import Photos from './components/Photos'
 import Mypost from './components/Mypost'
+import ViewPost from '../Home/components/ViewPost'
+import { toast } from 'sonner'
+import postServices from '@/services/post.services'
+import { useParams } from 'next/navigation'
 
 type contentTypes = {
     title: string,
     description: React.ReactNode
 }[]
 const Profile = () => {
-    const posts = [
-        {
-            name: "Sarah Johnson",
-            ProfileUrl: null,
-            postUrl: "https://randomuser.me/api/portraits/women/2.jpg",
-            likeCount: "256",
-            timeStamp: "2 hours ago"
-        },
-        {
-            name: "Alex Chen",
-            ProfileUrl: null,
-            postUrl: "https://randomuser.me/api/portraits/women/4.jpg",
-            likeCount: "432",
-            timeStamp: "4 hours ago"
-        },
-        {
-            name: "Maria Garcia",
-            ProfileUrl: null,
-            postUrl: "https://randomuser.me/api/portraits/women/7.jpg",
-            likeCount: "189",
-            timeStamp: "6 hours ago"
-        },
-        {
-            name: "James Wilson",
-            ProfileUrl: null,
-            postUrl: "https://randomuser.me/api/portraits/women/1.jpg",
-            likeCount: "567",
-            timeStamp: "8 hours ago"
-        },
-        {
-            name: "Emma Thompson",
-            ProfileUrl: null,
-            postUrl: "https://randomuser.me/api/portraits/women/9.jpg",
-            likeCount: "321",
-            timeStamp: "12 hours ago"
+
+    const [show, setShow] = useState<string>("Posts")
+    const [profileData, setProfileData] = useState([])
+
+    const params = useParams();
+    const userId = params?.id;
+    const userProfileData = async () => {
+        try {
+            const response = await postServices.getpostById(userId as string)
+            setProfileData(response?.data)
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message);
+
         }
-    ];
+    }
+    useEffect(() => {
+        userProfileData();
+    }, [])
+
     const content: contentTypes = [
         {
             title: "Posts",
-            description: <div>
-                {posts.map((post, index) => (
-                    <Mypost key={index} {...post} />
+            description: <div className='flex flex-col gap-4'>
+                {profileData?.map((postData, index: number) => (
+                    <ViewPost key={index} postData={postData} />
                 ))}
             </div>
         },
@@ -63,14 +49,13 @@ const Profile = () => {
         },
         {
             title: "Photos",
-            description: <Photos />
+            description: <Photos postData={profileData} />
         },
         {
             title: "Friends",
-            description: <Photos />
+            description: <p></p>
         }
     ]
-    const [show, setShow] = useState<string>("Posts")
     return (
         <div className='bg-slate-900 h-[100vh]  text-white overflow-y-scroll no-scrollbar'>
             <div className='relative mb-16'>
@@ -95,7 +80,7 @@ const Profile = () => {
                         <img
                             src="https://randomuser.me/api/portraits/men/3.jpg"
                             alt="profile-pic"
-                            className='h-32 w-32 rounded-full border-4 border-slate-900 object-cover'
+                            className='h-[200px] w-[250px] rounded-full border-4 border-slate-900 object-cover'
                         />
                         <Button
                             variant={"outline"}

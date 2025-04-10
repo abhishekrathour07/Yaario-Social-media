@@ -1,30 +1,33 @@
 import React from 'react'
 
-const Photos = () => {
-    const images =[
-        "https://randomuser.me/api/portraits/men/4.jpg",
-        "https://randomuser.me/api/portraits/men/5.jpg",
-        "https://randomuser.me/api/portraits/men/6.jpg",
-        "https://randomuser.me/api/portraits/men/7.jpg",
-        "https://randomuser.me/api/portraits/men/8.jpg",
-        "https://randomuser.me/api/portraits/men/9.jpg",
-        "https://randomuser.me/api/portraits/men/10.jpg",
-        "https://randomuser.me/api/portraits/men/1.jpg",
-      ]
-      
+interface PhotosProps {
+  postData: any[]
+}
+
+const Photos: React.FC<PhotosProps> = ({ postData }) => {
   return (
-    <div className=' bg-slate-800 p-4 rounded-lg'>
-        <h2 className='text-xl'>Photos Of You</h2>
-    <div className='grid mt-4 grid-cols-4 gap-4'>
-    {images.slice(0,7).map((image:string,index:number)=>(
-       <div key={index} className='overflow-hidden border rounded-lg'>
-           <img src={image} alt="image" className='object-contain h-full w-full  hover:scale-110 transition-all duration-300 cursor-pointer'/>
-       </div>
-     ))}
-     <div className='h-full cursor-pointer bg-slate-400 rounded-lg border flex items-center justify-center text-2xl'>View All</div>
+    <div className='bg-slate-800 p-4 rounded-lg'>
+      <h2 className='text-xl'>Photos Of You</h2>
+      <div className='grid mt-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-4'>
+        {postData?.slice(0, 7).map((post: any, index: number) => (
+          post?.postImageUrl !== null && (
+            <div key={index} className='overflow-hidden border rounded-lg aspect-square'>
+              <img
+                src={post?.postImageUrl}
+                alt="image"
+                className='object-cover h-full w-full hover:scale-110 transition-all duration-300 cursor-pointer'
+              />
+            </div>
+          )
+        ))}
+        {postData?.length > 7 && (
+          <div className='aspect-square cursor-pointer bg-slate-700 hover:bg-slate-600 transition-colors rounded-lg border border-slate-600 flex items-center justify-center text-base sm:text-lg md:text-2xl font-medium'>
+            View All
+          </div>
+        )}
+      </div>
     </div>
-   </div>
-  ) 
+  )
 }
 
 export default Photos
