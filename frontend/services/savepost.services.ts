@@ -8,6 +8,12 @@ const savePostServices = {
             withCredentials: true
         });
         return response.data;
+    },
+    saveUnsavePost: async (postId: any) => {
+        const response = await axios.put(`${API_URL}/post/save`, {postId}, {
+            withCredentials: true
+        });
+        return response.data;
     }
 }
 

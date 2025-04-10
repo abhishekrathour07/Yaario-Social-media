@@ -26,6 +26,7 @@ import { useUserStore } from "@/store/userStore";
 import EmojiPicker from "@/components/customs/EmojiPicker/EmojiPicker";
 import { DialogTitle } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
+import savePostServices from "@/services/savepost.services";
 
 type ViewPostProps = {
     postData: any;
@@ -93,6 +94,14 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
     const handledeletePost = async () => {
         try {
             const response = await postServices.deletePost(postData._id);
+            toast.success(response?.message);
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message);
+        }
+    };
+    const handleSavePost = async () => {
+        try {
+            const response = await savePostServices.saveUnsavePost(postData._id);
             toast.success(response?.message);
         } catch (error: any) {
             toast.error(error?.response?.data?.message);
@@ -219,7 +228,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
                     onClick={() => setSave(!save)}
                     className="flex cursor-pointer items-center justify-center gap-2 p-3 hover:bg-slate-700 transition-colors"
                 >
-                    <Bookmark className={`h-5 w-5 ${save ? "fill-white" : ""}`} />
+                    <Bookmark onClick={handleSavePost} className={`h-5 w-5 ${save ? "fill-white" : ""}`} />
                     <span className="text-sm">{save ? "Unsave" : "Save"}</span>
                 </button>
             </div>
