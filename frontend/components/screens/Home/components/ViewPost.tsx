@@ -42,7 +42,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
     const [commentData, setCommentData] = useState([]);
     const [save, setSave] = useState(postData?.isSaved || false);
     const [postLink, setPostLink] = useState("");
-    
+
     const router = useRouter()
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -66,7 +66,6 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
             toast.error(error?.response?.data?.message);
         }
     };
-
     const handleComment = async () => {
         try {
             if (!comment.trim()) return;
@@ -119,7 +118,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
                 </Avatar>
                 <div className="flex justify-between items-center w-full">
                     <div className="flex flex-col">
-                        <h2 className="font-semibold hover:underline cursor-pointer" onClick={()=>{router.push(`/profile/${postData?.userId?._id}`)}}>
+                        <h2 className="font-semibold hover:underline cursor-pointer" onClick={() => { router.push(`/profile/${postData?.userId?._id}`) }}>
                             {postData?.userId?.name}
                         </h2>
                         <div className="flex items-center gap-2 text-sm text-gray-400">
@@ -246,12 +245,12 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
 
                     {/* Comments List */}
                     <div className="space-y-4">
-                        {commentData.length === 0 && (
+                        {commentData && commentData.length === 0 && (
                             <div className="h-[10vh] flex justify-center items-center text-gray-400">
                                 <p>No comment yet. Be the first one to comment...</p>
                             </div>
                         )}
-                        {commentData?.map((comment: any) => (
+                        {commentData && commentData?.map((comment: any) => (
                             <div key={comment._id} className="flex items-start gap-2">
                                 <Avatar className="h-8 w-8">
                                     <AvatarImage

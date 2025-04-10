@@ -4,11 +4,11 @@ import { Camera } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import About from './components/About'
 import Photos from './components/Photos'
-import Mypost from './components/Mypost'
 import ViewPost from '../Home/components/ViewPost'
 import { toast } from 'sonner'
 import postServices from '@/services/post.services'
 import { useParams } from 'next/navigation'
+import { useUserStore } from '@/store/userStore'
 
 type contentTypes = {
     title: string,
@@ -20,10 +20,12 @@ const Profile = () => {
     const [profileData, setProfileData] = useState([])
 
     const params = useParams();
-    const userId = params?.id;
+    const { userId } = useUserStore()
+    const Id = params?.id || userId;
+
     const userProfileData = async () => {
         try {
-            const response = await postServices.getpostById(userId as string)
+            const response = await postServices.getpostById(Id as string)
             setProfileData(response?.data)
         } catch (error: any) {
             toast.error(error?.response?.data?.message);
@@ -80,7 +82,7 @@ const Profile = () => {
                         <img
                             src="https://randomuser.me/api/portraits/men/3.jpg"
                             alt="profile-pic"
-                            className='h-[200px] w-[250px] rounded-full border-4 border-slate-900 object-cover'
+                            className=' rounded-full border-4 border-slate-900 object-cover'
                         />
                         <Button
                             variant={"outline"}

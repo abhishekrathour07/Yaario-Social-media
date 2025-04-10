@@ -31,7 +31,6 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
     const handlecreatePost = async () => {
         try {
-            console.log(caption)
             if (!selectedFile) {
                 return toast.error('Please select an image');
             }
@@ -51,7 +50,6 @@ const CreatePost: React.FC<CreatePostProps> = ({
 
     const handleTimeline = async () => {
         try {
-            console.log(caption)
             const payload = {
                 caption: caption,
                 postImageUrl: null
