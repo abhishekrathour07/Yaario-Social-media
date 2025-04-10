@@ -12,15 +12,19 @@ const toggleSavePost = async (req, res) => {
             return responseHandler(res, 404, "Post not found");
         }
 
-        // Check if already saved
-        const alreadySaved = await savedPostModel.findOne({ userId: loggedInUserId, post: postId });
+        const savedPost = await savedPostModel.findOne({ userId: loggedInUserId, post: postId });
 
-        if (alreadySaved) {
+        if (savedPost) {
+            // Simply delete it, don't toggle isSaved
             await savedPostModel.deleteOne({ userId: loggedInUserId, post: postId });
             return responseHandler(res, 200, "Post unsaved successfully");
-
         } else {
-            await savedPostModel.create({ userId: loggedInUserId, post: postId });
+            // Save it fresh
+            await savedPostModel.create({
+                userId: loggedInUserId,
+                post: postId,
+                isSaved: true,
+            });
             return responseHandler(res, 200, "Post saved successfully");
         }
 
@@ -33,20 +37,22 @@ const toggleSavePost = async (req, res) => {
 const getSavedPosts = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
-
+        const { postId } = req.body
         const savedPosts = await savedPostModel
-        .find({ userId: loggedInUserId })
-        .populate({
-          path: "post",
-          populate: {
-            path: "userId", 
-            select: "name avatar", 
-          },
-        });
-      
+            .find({ userId: loggedInUserId, isSaved: true, postId })
+            .populate({
+                path: "post",
+                populate: {
+                    path: "userId",
+                    select: "name avatar",
+                },
+            });
 
-        // Extract only the post details from each savedPost entry
-        const posts = savedPosts.map((item) => item.post);
+        // Combine post details and isSaved flag
+        const posts = savedPosts.map((item) => ({
+            ...item.post.toObject(),  // convert Mongoose doc to plain object
+            isSaved: item.isSaved     // append isSaved value
+        }));
 
         return responseHandler(res, 200, "Saved posts fetched successfully", posts);
     } catch (error) {
@@ -54,6 +60,7 @@ const getSavedPosts = async (req, res) => {
         return responseHandler(res, 500, "Internal Server Error");
     }
 };
+
 
 
 export { toggleSavePost, getSavedPosts };

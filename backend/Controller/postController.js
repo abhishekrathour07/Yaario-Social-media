@@ -70,15 +70,40 @@ const deletePostById = async(req,res)=>{
 }
 
 
+import savedPostModel from "../Models/savedPostModel.js";
+import postModel from "../Models/postModel.js";
+
 const getAllPosts = async (req, res) => {
     try {
-        const posts = await postModal.find().sort({createdAt:-1}).populate("userId", "name avatar");
-        return responseHandler(res, 200, "Posts fetched successfully", posts);
+        const loggedInUserId = req.user._id;
+
+        // 1. Fetch all posts
+        const posts = await postModel.find()
+            .populate("userId", "name avatar")  
+            .sort({ createdAt: -1 });
+
+        // 2. Get saved post IDs for this user
+        const savedPosts = await savedPostModel.find({
+            userId: loggedInUserId,
+            isSaved: true
+        });
+
+        const savedPostIds = savedPosts.map((item) => item.post.toString());
+
+        const postsWithSavedStatus = posts.map((post) => {
+            const postObj = post.toObject();
+            postObj.isSaved = savedPostIds.includes(post._id.toString());
+            return postObj;
+        });
+
+        return responseHandler(res, 200, "Posts fetched successfully", postsWithSavedStatus);
+
     } catch (error) {
-        console.error("Error in getAllPosts:", error);
+        console.log(error);
         return responseHandler(res, 500, "Internal Server Error");
     }
 };
+
 
 
 export { createPost, getAllPosts,getAllPostByUserId,deletePostById };

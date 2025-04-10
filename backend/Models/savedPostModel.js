@@ -11,6 +11,10 @@ const savedPostSchema = new mongoose.Schema({
         ref: "Post",
         required: true
     },
+    isSaved: {
+        type: Boolean,
+        default: true
+    },
     savedAt: {
         type: Date,
         default: Date.now
