@@ -1,20 +1,17 @@
 import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import React from 'react'
-
-type FriendRequestCardsProps = {
-  name: string,
-  imageurl: string | null,
-  timeStamp: string,
-  mutualFriends: string
+import moment from 'moment'
+interface requestProps {
+  name: string;
+  imageurl: string;
+  mutualFriends: number;
+  timeStamp: string;
+  onAccept: () => void;
+  onDelete: () => void;  // Add this line
 }
-const FriendRequestCards: React.FC<FriendRequestCardsProps> = ({
-  name,
-  imageurl,
-  timeStamp,
-  mutualFriends
-}) => {
+
+const FriendRequestCards: React.FC<requestProps> = ({ name, imageurl, mutualFriends, timeStamp, onDelete, onAccept }) => {
   return (
     <div className='bg-slate-800 p-4 rounded-lg flex gap-4 space-y-4'>
       <Avatar className="h-20 w-20">
@@ -28,12 +25,12 @@ const FriendRequestCards: React.FC<FriendRequestCardsProps> = ({
       <div className='flex flex-col gap-2 text-white w-full'>
         <div className="flex justify-between items-center ">
           <h2>{name}</h2>
-          <p className='text-xs'>{timeStamp}</p>
+          <p className='text-xs'>{moment(timeStamp).fromNow()}</p>
         </div>
         <p className='text-gray-500'>{mutualFriends}</p>
         <div className='flex gap-4'>
-          <CustomButton text='Confirm' className='w-full'/>
-          <button className='bg-transparent border rounded-md w-full text-white'>Cancel</button>
+          <CustomButton onClick={onAccept} text='Confirm' className='w-full' />
+          <button onClick={onDelete} className='bg-transparent border rounded-md w-full text-white'>Cancel</button>
         </div>
       </div>
     </div>

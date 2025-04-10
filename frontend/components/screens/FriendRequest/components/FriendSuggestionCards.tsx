@@ -2,20 +2,16 @@ import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import React from 'react'
 
+interface suggestionProps {
+  name: string;
+  imageurl: string;
+  mutualFriends: number;
+  onSendRequest: () => void;
+}
 
-type suggestionProps = {
-    name: string,
-    imageurl: string | null,
-    mutualFriends: string
-  }
-
-const FriendSuggestionCards:React.FC<suggestionProps> = ({
-    name,
-    imageurl,
-    mutualFriends
-}) => {
+const FriendSuggestionCards: React.FC<suggestionProps> = ({ name, imageurl, mutualFriends, onSendRequest }) => {
   return (
-    <div className='bg-slate-800 p-4 rounded-lg flex gap-4 space-y-4'>
+    <div className='bg-slate-800 p-4 rounded-lg flex gap-4'>
       <Avatar className="h-20 w-20">
         <AvatarImage
           src={imageurl !== null
@@ -25,13 +21,19 @@ const FriendSuggestionCards:React.FC<suggestionProps> = ({
         />
       </Avatar>
       <div className='flex flex-col gap-2 text-white w-full'>
-        <div className="flex justify-between items-center ">
+        <div className="flex justify-between items-center">
           <h2>{name}</h2>
         </div>
-        <p className='text-gray-500'>{mutualFriends}</p>
+        <p className='text-gray-500'>{mutualFriends} mutual friends</p>
         <div className='flex gap-4'>
-          <CustomButton text='Add Friend' className='w-full'/>
-          <button className='bg-transparent border rounded-md w-full text-white'>Remove</button>
+          <CustomButton 
+            text='Add Friend' 
+            className='w-full'
+            onClick={onSendRequest}
+          />
+          <button className='bg-transparent border rounded-md w-full text-white'>
+            Remove
+          </button>
         </div>
       </div>
     </div>
