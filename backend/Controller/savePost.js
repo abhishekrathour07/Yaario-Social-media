@@ -34,13 +34,26 @@ const getSavedPosts = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
 
-        const savedPosts = await savedPostModel.find({ userId: loggedInUserId }).populate("post");
+        const savedPosts = await savedPostModel
+        .find({ userId: loggedInUserId })
+        .populate({
+          path: "post",
+          populate: {
+            path: "userId", 
+            select: "name avatar", 
+          },
+        });
+      
 
-        return responseHandler(res, 200, "Saved posts fetched successfully", savedPosts);
+        // Extract only the post details from each savedPost entry
+        const posts = savedPosts.map((item) => item.post);
+
+        return responseHandler(res, 200, "Saved posts fetched successfully", posts);
     } catch (error) {
         console.log(error);
         return responseHandler(res, 500, "Internal Server Error");
     }
 };
+
 
 export { toggleSavePost, getSavedPosts };
