@@ -31,8 +31,14 @@ const postServices = {
         return response.data;
     },
 
-    addComment: async (postId: string, data: { comment: string }) => {
-        const response = await axios.post(`${API_URL}/comment/${postId}`, data, {
+    addComment: async (data: { postId: string, commentText: string }) => {
+        const response = await axios.post(`${API_URL}/post/create-comment`, data, {
+            withCredentials: true
+        });
+        return response.data;
+    },
+    getAllcomment: async (postId: string) => {
+        const response = await axios.get(`${API_URL}/post/getall-comment/${postId}`, {
             withCredentials: true
         });
         return response.data;
