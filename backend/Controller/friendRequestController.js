@@ -101,9 +101,9 @@ const getAllFriendRequest = async (req, res) => {
                 $in: loggedInUser.followers,
                 $nin: loggedInUser.followings,
             }
-        }).select("avatar name email")
+        }).select("avatar name email createdAt")
 
-        return responseHandler(res,200, "Data fetched SuccessFully", userTOAcceptRequest);
+        return responseHandler(res, 200, "Data fetched SuccessFully", userTOAcceptRequest);
 
 
     } catch (error) {
@@ -112,5 +112,78 @@ const getAllFriendRequest = async (req, res) => {
     }
 }
 
+const acceptFriendRequest = async (req, res) => {
+    try {
+        const loggedInUserId = req.user._id;
+        const { friendId } = req.body;
 
-export { sendfriendRequest, deleteFriendRequest, getAllFriendRequest }
+        if (loggedInUserId.toString() === friendId.toString()) {
+            return responseHandler(res, 400, "You cannot accept your own request");
+        }
+
+        const loggedInUser = await userModal.findById(loggedInUserId);
+        const senderUser = await userModal.findById(friendId);
+
+        if (!loggedInUser || !senderUser) {
+            return responseHandler(res, 404, "User not found");
+        }
+
+        // Ensure that the sender actually sent a request
+        const isPendingRequest = loggedInUser.followers.includes(friendId);
+        if (!isPendingRequest) {
+            return responseHandler(res, 400, "No pending friend request from this user");
+        }
+
+        // Accept request → You follow them back
+        if (!loggedInUser.followings.includes(friendId)) {
+            loggedInUser.followings.push(friendId);
+        }
+
+        // And they become your follower (if not already)
+        if (!senderUser.followers.includes(loggedInUserId)) {
+            senderUser.followers.push(loggedInUserId);
+        }
+
+        await loggedInUser.save();
+        await senderUser.save();
+
+        return responseHandler(res, 200, "Friend request accepted successfully");
+
+    } catch (error) {
+        console.log(error);
+        return responseHandler(res, 500, "Internal Server Error");
+    }
+};
+
+const getAllFriends = async (req, res) => {
+    try {
+        const loggedInUserId = req.user._id;
+
+        const loggedInUser = await userModal
+            .findById(loggedInUserId)
+            .select("followings followers");
+
+        if (!loggedInUser) {
+            return responseHandler(res, 404, "User not found");
+        }
+
+        // Get mutuals — those who are both followers and followings
+        const mutualFriendsIds = loggedInUser.followings.filter(id =>
+            loggedInUser.followers.includes(id)
+        );
+
+        const friends = await userModal.find({
+            _id: { $in: mutualFriendsIds },
+        }).select("name avatar email createdAt");
+
+        return responseHandler(res, 200, "Friends fetched successfully", friends);
+    } catch (error) {
+        console.log(error);
+        return responseHandler(res, 500, "Internal Server Error");
+    }
+};
+
+
+
+
+export { sendfriendRequest, deleteFriendRequest, getAllFriendRequest, acceptFriendRequest }
