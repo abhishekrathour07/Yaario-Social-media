@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import postServices from '@/services/post.services'
 import { useParams } from 'next/navigation'
 import { useUserStore } from '@/store/userStore'
+import FriendList from './components/FriendList'
 
 type contentTypes = {
     title: string,
@@ -35,7 +36,7 @@ const Profile = () => {
     useEffect(() => {
         userProfileData();
     }, [])
-
+   console.log(profileData)
     const content: contentTypes = [
         {
             title: "Posts",
@@ -55,7 +56,7 @@ const Profile = () => {
         },
         {
             title: "Friends",
-            description: <p></p>
+            description: <FriendList />
         }
     ]
     return (

@@ -150,7 +150,6 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
                                     Delete Post
                                 </DropdownMenuItem>
                             )}
-                            <DropdownMenuItem className="text-white">View profile</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </div>

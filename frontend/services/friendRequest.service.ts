@@ -32,6 +32,12 @@ const requestService = {
         });
         return response.data;
     },
+    getFriendList: async () => {
+        const response = await axios.get(`${API_URL}/friend-list`, {
+            withCredentials: true
+        });
+        return response.data;
+    },
    
 }
 
