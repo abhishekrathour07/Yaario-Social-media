@@ -3,6 +3,7 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import requestService from '@/services/friendRequest.service'
 import { Search, UserMinus, MessageCircle } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -18,10 +19,12 @@ const FriendList = () => {
   const [friendList, setFriendList] = useState<friendListTypes[]>([])
   const [loading, setLoading] = useState(true)
 
+  const params = useParams()
+  const userId = params.id;
   const fetchFriends = async () => {
     try {
       setLoading(true)
-      const response = await requestService.getFriendList();
+      const response = await requestService.getFriendList(userId as string);
       setFriendList(response?.data || [])
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to fetch friends')

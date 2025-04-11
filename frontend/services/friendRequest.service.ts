@@ -32,8 +32,8 @@ const requestService = {
         });
         return response.data;
     },
-    getFriendList: async () => {
-        const response = await axios.get(`${API_URL}/friend-list`, {
+    getFriendList: async (userId:string) => {
+        const response = await axios.get(`${API_URL}/friend-list/${userId}`, {
             withCredentials: true
         });
         return response.data;

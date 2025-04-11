@@ -7,7 +7,7 @@ export type User = {
   _id: string;
   name: string;
   email: string;
-  profileUrl: string;
+  avatar: string;
 };
 
 // Define the Zustand state and methods
@@ -43,7 +43,7 @@ export const useUserStore = create<UserState>()(
               userId: userData._id,
               name: userData.name,
               email: userData.email,
-              profileUrl: userData.profileUrl
+              profileUrl: userData.avatar
             });
 
             return userData;
@@ -68,7 +68,7 @@ export const useUserStore = create<UserState>()(
           userId: user._id,
           name: user.name,
           email: user.email,
-          profileUrl: user.profileUrl
+          profileUrl: user.avatar
         }),
 
       // Clear user data

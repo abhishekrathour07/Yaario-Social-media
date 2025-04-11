@@ -9,21 +9,16 @@ import UploadFile from '@/components/customs/UploadFile/UploadFile'
 import EmojiPicker from '@/components/customs/EmojiPicker/EmojiPicker'
 import { toast } from 'sonner';
 import postServices from '@/services/post.services'
+import { useUserStore } from '@/store/userStore'
 
-type CreatePostProps = {
-    imageUrl?: string | null,
-    name?: string,
-}
 
-const CreatePost: React.FC<CreatePostProps> = ({
-    imageUrl = null,
-    name = "Abhishek Singh"
-}) => {
+const CreatePost: React.FC = () => {
+
     const [caption, setCaption] = useState("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [isPhotoDialogOpen, setIsPhotoDialogOpen] = useState<boolean>(false);
     const [timelineopen, setTimelineopen] = useState<boolean>(false);
-
+    const { name, profileUrl } = useUserStore()
 
     const handleEmojiSelect = (emoji: any) => {
         setCaption(prev => prev + emoji.native);
@@ -70,8 +65,8 @@ const CreatePost: React.FC<CreatePostProps> = ({
             <div className='flex gap-4 items-center'>
                 <Avatar className="h-12 w-12">
                     <AvatarImage
-                        src={imageUrl !== null
-                            ? imageUrl
+                        src={profileUrl !== null
+                            ? profileUrl
                             : `https://ui-avatars.com/api/?name=${name}`
                         }
                     />
