@@ -11,10 +11,9 @@ const userSchema = new mongoose.Schema({
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     followings: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 },
-    {
-        timestamps: true,
-        toJSON: { getters: true }
-    })
+{
+    timestamps: true,
+    toJSON: { getters: true }
+})
 
-const userModal = mongoose.model("User", userSchema);
-export default userModal 
+export default mongoose.models.User || mongoose.model("User", userSchema)

@@ -1,4 +1,4 @@
-import userModal from "../Models/userModal.js"
+import userModal from "../models/userModal.js"
 import responseHandler from "../utils/responseHandler.js"
 
 
@@ -13,10 +13,24 @@ const getLoginUserDetail = async (req, res) => {
     }
 };
 
+const getProfileDetail = async (req, res) => {
+    try {
+      const { userId } = req.params;
+      const user = await userModal.findById(userId).select("id name avatar coverImage followers followings");
+      return responseHandler(res, 200, "User data fetched successfully", user);
+    } catch (error) {
+      console.log(error);
+      return responseHandler(res, 500, "Internal Server Error");
+    }
+  };
+  
+
+
+
 const friendSuggestion = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
-      
+
         const loggedInUser = await userModal.findById(loggedInUserId).select("followings followers");
         if (!loggedInUser) {
             return responseHandler(res, 404, "user data not found please check the userId");
@@ -37,4 +51,4 @@ const friendSuggestion = async (req, res) => {
     }
 
 }
-export { getLoginUserDetail, friendSuggestion }
+export { getLoginUserDetail, friendSuggestion, getProfileDetail }

@@ -7,6 +7,6 @@ requestRouter.post('/send-request', sendfriendRequest);
 requestRouter.post("/delete-request", deleteFriendRequest);
 requestRouter.post("/accept-request", acceptFriendRequest);
 requestRouter.get("/friend-requests", getAllFriendRequest)
-requestRouter.get("/friend-list", getAllFriends)
+requestRouter.get("/friend-list/:userId", getAllFriends)
 
 export default requestRouter

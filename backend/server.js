@@ -13,6 +13,7 @@ import likeRouter from './Routes/likeRouter.js';
 import commentRouter from './Routes/commentRouter.js';
 import shareRouter from './Routes/shareRoutes.js';
 import savePostRouter from './Routes/savePostRoutes.js';
+import editProfileRouter from './Routes/editProfileRoutes.js';
 
 dotenv.config()
 
@@ -38,6 +39,7 @@ app.use('/api/v1', authMiddleware, commentRouter) //comment and delete comment o
 app.use('/api/v1', authMiddleware, shareRouter) //comment and delete comment on post
 app.use('/api/v1', authMiddleware, requestRouter)//share a post Routes
 app.use('/api/v1', authMiddleware, savePostRouter)//share a post Routes
+app.use('/api/v1', authMiddleware, editProfileRouter)//edit profile details Routes
 
 app.listen(PORT, () => (
     console.log("Server is Running at Port " + PORT)

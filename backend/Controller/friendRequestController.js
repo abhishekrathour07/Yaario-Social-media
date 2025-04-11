@@ -1,4 +1,4 @@
-import userModal from "../Models/userModal.js";
+import userModal from "../models/userModal.js";
 import responseHandler from "../utils/responseHandler.js";
 
 
@@ -156,10 +156,10 @@ const acceptFriendRequest = async (req, res) => {
 
 const getAllFriends = async (req, res) => {
     try {
-        const loggedInUserId = req.user._id;
+        const {userId} = req.params;
 
         const loggedInUser = await userModal
-            .findById(loggedInUserId)
+            .findById(userId)
             .select("followings followers");
 
         if (!loggedInUser) {
@@ -173,7 +173,7 @@ const getAllFriends = async (req, res) => {
 
         const friends = await userModal.find({
             _id: { $in: mutualFriendsIds },
-        }).select("name avatar email createdAt");
+        }).select("name avatar email updatedAt");
 
         return responseHandler(res, 200, "Friends fetched successfully", friends);
     } catch (error) {
