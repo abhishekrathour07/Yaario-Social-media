@@ -47,42 +47,41 @@ const sendfriendRequest = async (req, res) => {
 }
 
 const deleteFriendRequest = async (req, res) => {
-    const userId = req.user._id;
-    const { friendId } = req.body;
-
-    if (userId === friendId) {
-        return responseHandler(res, 400, "You cannot Remove YourSelf");
-    }
-
     try {
-        const loggedinUser = await userModal.findById(userId);
-        const userToFollow = await userModal.findById(friendId);
+        const loggedInUserId = req.user._id;
+        const { friendId } = req.body;
 
-        if (!loggedinUser || !userToFollow) {
+        const loggedInUser = await userModal.findById(loggedInUserId);
+        const senderUser = await userModal.findById(friendId);
+
+        if (!loggedInUser || !senderUser) {
             return responseHandler(res, 404, "User not found");
         }
 
-        if (!loggedinUser.followings.includes(friendId)) {
-            return responseHandler(res, 400, "You are not following this user");
+        const isPendingRequest = loggedInUser.followers.includes(friendId);
+
+        if (!isPendingRequest) {
+            return responseHandler(res, 400, "No pending friend request from this user");
         }
 
-        loggedinUser.followings = loggedinUser.followings.filter(
+        // Remove from followers and followings
+        loggedInUser.followers = loggedInUser.followers.filter(
             (id) => id.toString() !== friendId.toString()
         );
 
-        userToFollow.followers = userToFollow.followers.filter(
-            (id) => id.toString() !== userId.toString()
+        senderUser.followings = senderUser.followings.filter(
+            (id) => id.toString() !== loggedInUserId.toString()
         );
 
-        await loggedinUser.save();
-        await userToFollow.save();
+        await loggedInUser.save();
+        await senderUser.save();
 
-        return responseHandler(res, 200, "Friend Request deleted SuccessFully")
-
+        return responseHandler(res, 200, "Friend request rejected successfully");
     } catch (error) {
-        console.log(error)
+        console.error(error);
         return responseHandler(res, 500, "Internal Server Error");
     }
+
 
 }
 
@@ -186,4 +185,4 @@ const getAllFriends = async (req, res) => {
 
 
 
-export { sendfriendRequest, deleteFriendRequest, getAllFriendRequest, acceptFriendRequest }
+export { sendfriendRequest, deleteFriendRequest, getAllFriendRequest, acceptFriendRequest, getAllFriends }
