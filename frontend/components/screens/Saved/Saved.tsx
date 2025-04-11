@@ -40,7 +40,9 @@ const Saved = () => {
     
         <main className="w-full flex flex-col items-center">
             {isLoading ? (
-                <Loader />
+               <div className='h-[60vh] flex items-center justify-center'>
+                     <Loader />
+               </div>
             ) : savePostData.length === 0 ? (
                 <div className="h-[60vh] flex items-center justify-center">
                     <NotFound text="No saved posts found" />

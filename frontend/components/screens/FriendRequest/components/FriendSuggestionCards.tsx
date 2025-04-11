@@ -9,7 +9,7 @@ interface suggestionProps {
   onSendRequest: () => void;
 }
 
-const FriendSuggestionCards: React.FC<suggestionProps> = ({ name, imageurl, mutualFriends, onSendRequest }) => {
+const FriendSuggestionCards: React.FC<suggestionProps> = ({ name, imageurl, mutualFriends =20, onSendRequest }) => {
   return (
     <div className='bg-slate-800 p-4 rounded-lg flex gap-4'>
       <Avatar className="h-20 w-20">

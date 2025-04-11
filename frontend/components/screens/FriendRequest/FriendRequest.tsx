@@ -5,6 +5,7 @@ import FriendSuggestionCards from './components/FriendSuggestionCards'
 import requestService from '@/services/friendRequest.service'
 import { toast } from 'sonner'
 import Loader from '@/components/customs/Loader/Loader'
+import NotFound from '@/components/customs/Noresult/NotFound'
 
 const FriendRequest = () => {
   const [friendRequests, setFriendRequests] = useState([]);
@@ -19,7 +20,7 @@ const FriendRequest = () => {
       toast.error(error?.response?.data?.message || 'Failed to fetch friend requests');
     }
   };
-console.log(friendRequests)
+  console.log(friendRequests)
   const getFriendSuggestions = async () => {
     try {
       const response = await requestService.friendSuggestion();
@@ -87,6 +88,9 @@ console.log(friendRequests)
           See All
         </button>
       </div>
+      {friendRequests.length === 0 && (
+       <NotFound text='No friend request found' className='h-40 '/>
+      )}
       <div className='grid md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-4 mt-4 mb-4'>
         {friendRequests.slice(0, 10).map((request: any, index: number) => (
           <div key={request._id || index}>

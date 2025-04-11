@@ -10,6 +10,7 @@ import { LoginValidationSchema } from './validation/LoginValidationSchema'
 import { authService, LoginData } from '@/services/auth.service'
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation'
+import { useUserStore } from '@/store/userStore'
 
 
 const Login = () => {
@@ -20,11 +21,12 @@ const Login = () => {
       password: ''
     },
   })
-const router = useRouter();
+  const router = useRouter();
   const onSubmit = async (data: LoginData) => {
     try {
       const response = await authService.login(data);
       toast.success(response?.message);
+      await useUserStore.getState().fetchUserDetails();
       router.push('/home')
 
     } catch (error: any) {

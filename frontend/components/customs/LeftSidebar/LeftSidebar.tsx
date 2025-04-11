@@ -18,10 +18,11 @@ const LeftSidebar = () => {
   const router = useRouter();
   const { name, profileUrl,email } = useUserStore()
   const handleLogout = async () => {
-    try {
+  try {
       const response = await authService.logout();
       toast.success(response?.message)
       router.push('/login')
+      await useUserStore.getState().clearUser();
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Something went wrong');
     }
