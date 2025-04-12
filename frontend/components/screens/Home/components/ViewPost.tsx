@@ -27,12 +27,14 @@ import EmojiPicker from "@/components/customs/EmojiPicker/EmojiPicker";
 import { DialogTitle } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import savePostServices from "@/services/savepost.services";
+import moment from "moment";
 
 type ViewPostProps = {
     postData: any;
+    refreshFeed?: () => any
 };
 
-const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
+const ViewPost: React.FC<ViewPostProps> = ({ postData, refreshFeed }) => {
     const { userId } = useUserStore();
     const [liked, setLiked] = useState(() =>
         postData?.like?.some((l: any) => l.user === userId)
@@ -67,6 +69,14 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
         }
     };
 
+    const getComment = async () => {
+        try {
+            const response = await postServices.getAllcomment(postData._id);
+            setCommentData(response?.data);
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message);
+        }
+    };
     const handleComment = async () => {
         try {
             if (!comment.trim()) return;
@@ -77,24 +87,19 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
             toast.success(response?.message);
             setComment("");
             setShowComments(false);
+            getComment();
         } catch (error: any) {
             toast.error(error?.response?.data?.message);
         }
     };
 
-    const getComment = async () => {
-        try {
-            const response = await postServices.getAllcomment(postData._id);
-            setCommentData(response?.data);
-        } catch (error: any) {
-            toast.error(error?.response?.data?.message);
-        }
-    };
+
 
     const handledeletePost = async () => {
         try {
             const response = await postServices.deletePost(postData._id);
             toast.success(response?.message);
+            refreshFeed && refreshFeed();
         } catch (error: any) {
             toast.error(error?.response?.data?.message);
         }
@@ -132,7 +137,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
                             {postData?.userId?.name}
                         </h2>
                         <div className="flex items-center gap-2 text-sm text-gray-400">
-                            <span>{postData?.createdAt}</span>
+                            <span>{moment(postData?.createdAt).fromNow()}</span>
                             <Globe className="h-3.5 w-3.5" />
                         </div>
                     </div>
@@ -228,7 +233,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData }) => {
                     onClick={handleSavePost}
                     className="flex cursor-pointer items-center justify-center gap-2 p-3 hover:bg-slate-700 transition-colors"
                 >
-                    <Bookmark  className={`h-5 w-5 ${save ? "fill-white" : ""}`} />
+                    <Bookmark className={`h-5 w-5 ${save ? "fill-white" : ""}`} />
                     <span className="text-sm">{save ? "Unsave" : "Save"}</span>
                 </button>
             </div>

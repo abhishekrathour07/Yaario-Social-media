@@ -16,6 +16,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import UploadFile from '@/components/customs/UploadFile/UploadFile'
 import CustomButton from '@/components/customs/CustomButton/CustomButton'
 import Loader from '@/components/customs/Loader/Loader'
+import NotFound from '@/components/customs/Noresult/NotFound'
 
 type contentTypes = {
     title: string,
@@ -93,15 +94,19 @@ const Profile = () => {
         userProfileData();
         userDataById();
     }, [])
-    console.log(data);
-
     const content: contentTypes = [
         {
             title: "Posts",
-            description: <div className='flex flex-col gap-4'>
-                {profileData?.map((postData, index: number) => (
-                    <ViewPost key={index} postData={postData} />
-                ))}
+            description: <div>
+                {profileData?.length === 0 ?
+                    <NotFound text='No Post yet' />
+                    :
+                    <div className='flex flex-col gap-4'>
+                        {profileData?.map((postData, index: number) => (
+                            <ViewPost key={index} postData={postData} />
+                        ))}
+                    </div>
+                }
             </div>
         },
         {
@@ -110,7 +115,14 @@ const Profile = () => {
         },
         {
             title: "Photos",
-            description: <Photos postData={profileData} />
+            description:
+                <div>
+                    {profileData?.length === 0 ?
+                        <NotFound text='No Post yet' />
+                        :
+                        <Photos postData={profileData} />
+                    }
+                </div>
         },
         {
             title: "Friends",
@@ -118,10 +130,10 @@ const Profile = () => {
         }
     ]
 
-    if(!data){
+    if (!data) {
         return (
             <div className='h-full bg-slate-900 flex items-center justify-center'>
-                <Loader/>
+                <Loader />
             </div>
         )
     }
@@ -232,6 +244,7 @@ const Profile = () => {
             <div className='p-6'>
                 {content.map((item: any) => (
                     show === item.title && (
+
                         <div key={item.title} className='min-h-[60vh]'>
                             <h1 className='text-lg'>{item.description}</h1>
                         </div>

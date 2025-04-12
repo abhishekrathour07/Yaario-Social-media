@@ -11,8 +11,12 @@ import { toast } from 'sonner';
 import postServices from '@/services/post.services'
 import { useUserStore } from '@/store/userStore'
 
+type createPostTypes = {
+    refreshFeed: () => any
+}
 
-const CreatePost: React.FC = () => {
+
+const CreatePost: React.FC<createPostTypes> = ({refreshFeed}) => {
 
     const [caption, setCaption] = useState("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -37,6 +41,7 @@ const CreatePost: React.FC = () => {
             setCaption("")
             setSelectedFile(null);
             setIsPhotoDialogOpen(false)
+            refreshFeed()
 
         } catch (error: any) {
             toast.error(error?.response?.data?.message || 'Failed to create post');

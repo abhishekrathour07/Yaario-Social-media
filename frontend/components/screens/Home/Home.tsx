@@ -24,7 +24,7 @@ const Home = () => {
     }, [])
     return (
         <div className='bg-slate-900 h-screen py-4 sm:px-6 px-2 xl:px-16 text-white overflow-y-scroll no-scrollbar flex flex-col gap-4'>
-            <CreatePost />
+            <CreatePost refreshFeed = {handlePostData}/>
             <div>
                 <Stories />
             </div>
@@ -32,7 +32,8 @@ const Home = () => {
                 {data && data?.map((postData: any, index: number) => (
                     <div key={index}>
                         <ViewPost
-                            postData={postData} />
+                            postData={postData}
+                            refreshFeed = {handlePostData} />
                     </div>
 
                 ))}
