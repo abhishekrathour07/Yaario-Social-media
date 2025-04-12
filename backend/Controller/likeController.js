@@ -1,3 +1,4 @@
+import notificationModal from "../Models/NotificationModal.js";
 import postModal from "../Models/postModel.js";
 import responseHandler from "../utils/responseHandler.js";
 
@@ -25,6 +26,17 @@ const like = async (req, res) => {
             post.like.push({ user: loggedInuserId });
             post.likeCount += 1;
             await post.save();
+
+            // Create Notification
+            if (loggedInuserId.toString() !== post.userId.toString()) {
+                await notificationModal.create({
+                    sender: loggedInuserId,
+                    receiver: post.userId,
+                    type: 'like',
+                    post: postId,
+                    message: 'liked your post',
+                });
+            }
 
             return responseHandler(res, 200, "Post liked successfully", post);
         }

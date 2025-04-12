@@ -1,3 +1,4 @@
+import notificationModal from "../Models/NotificationModal.js";
 import postModal from "../Models/postModel.js";
 import responseHandler from "../utils/responseHandler.js";
 
@@ -9,10 +10,19 @@ const createComment = async (req, res) => {
 
         const post = await postModal.findById(postId);
         if (!post) {
-           return responseHandler(res, 404, "Post not Found");
+            return responseHandler(res, 404, "Post not Found");
         }
         post.comment.push({ user: loggedInUserId, commentText });
         post.commentCount += 1;
+        if (loggedInUserId.toString() !== post.userId.toString()) {
+            await notificationModal.create({
+                sender: loggedInUserId,
+                receiver: post.userId,
+                type: 'comment',
+                post: postId,
+                message: `comment on your post "${commentText}"`,
+            });
+        }
         await post.save();
         return responseHandler(res, 200, "You comment on post")
 

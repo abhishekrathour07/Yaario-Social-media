@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import userModal from '../Models/userModal.js'
+import userModal from '../models/userModal.js'
 import responseHandler from '../utils/responseHandler.js';
 import bioModal from '../Models/BioModel.js';
 
