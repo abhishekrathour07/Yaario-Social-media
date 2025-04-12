@@ -8,6 +8,12 @@ const notificationServices = {
         })
         return response.data
     },
+    markAllAsRead: async() => {
+        const response = await axios.put(`${API_URL}/notifications/markall-read`,{},{
+            withCredentials: true,
+        })
+        return response.data
+    },
 
 }
 export default notificationServices 

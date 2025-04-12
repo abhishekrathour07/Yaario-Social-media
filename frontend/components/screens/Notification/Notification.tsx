@@ -35,20 +35,15 @@ const Notification = () => {
         }
     }
 
-    // const handleMarkAsRead = async (notificationId: string) => {
-    //     try {
-    //         await notificationServices.markAsRead(notificationId)
-    //         setNotifications(prev => 
-    //             prev.map(notification => 
-    //                 notification._id === notificationId 
-    //                     ? { ...notification, isRead: true }
-    //                     : notification
-    //             )
-    //         )
-    //     } catch (error: any) {
-    //         toast.error('Failed to mark notification as read')
-    //     }
-    // }
+    const handleMarkAllAsRead = async () => {
+        try {
+            const response = await notificationServices.markAllAsRead()
+            toast.success(response?.message)
+            getNotifications()
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || 'Failed to mark all as read')
+        }
+    }
 
     useEffect(() => {
         getNotifications()
@@ -87,7 +82,7 @@ const Notification = () => {
                             </span>
                         )}
                     </div>
-                    <button className={`text-sm cursor-pointer flex gap-2  hover:underline ${notifications.length > 0 ? "text-white" : "text-gray-400"}`}>
+                    <button className={`text-sm cursor-pointer flex gap-2  hover:underline ${notifications.length === 0 ? " text-gray-400" : "text-white"}`} onClick={handleMarkAllAsRead}>
                         <CheckCheck /> Mark all as read
                     </button>
                 </div>
@@ -102,7 +97,6 @@ const Notification = () => {
                         {notifications.map((notification) => (
                             <div
                                 key={notification._id}
-                                // onClick={() => !notification.isRead && handleMarkAsRead(notification._id)}
                                 className={`flex items-start gap-4 p-4 rounded-lg cursor-pointer transition-colors
                                     ${notification.isRead ? 'bg-slate-800' : 'bg-slate-700 hover:bg-slate-600'}`}
                             >
