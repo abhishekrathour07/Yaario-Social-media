@@ -1,6 +1,7 @@
 import savedPostModel from "../Models/savedPostModel.js";
 import postModel from "../Models/postModel.js";
 import responseHandler from "../utils/responseHandler.js";
+import notificationModal from "../Models/NotificationModal.js";
 
 const toggleSavePost = async (req, res) => {
     try {
@@ -25,6 +26,16 @@ const toggleSavePost = async (req, res) => {
                 post: postId,
                 isSaved: true,
             });
+
+            if(loggedInUserId.toString() !== post.userId.toString()){
+                await notificationModal.create({
+                    sender: loggedInUserId,
+                    receiver: post.userId,
+                    type: 'save',
+                    post: postId,
+                    message: `saved your post`,
+                });
+            }
             return responseHandler(res, 200, "Post saved successfully");
         }
 

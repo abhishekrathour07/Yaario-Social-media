@@ -20,7 +20,7 @@ const createComment = async (req, res) => {
                 receiver: post.userId,
                 type: 'comment',
                 post: postId,
-                message: `comment on your post "${commentText}"`,
+                message: `comment on your post   "${commentText}"`,
             });
         }
         await post.save();
