@@ -1,3 +1,4 @@
+import notificationModal from "../Models/NotificationModal.js";
 import userModal from "../models/userModal.js";
 import responseHandler from "../utils/responseHandler.js";
 
@@ -36,6 +37,17 @@ const sendfriendRequest = async (req, res) => {
         userToFollow.followers.push(userId)
         await loggedinUser.save();
         await userToFollow.save();
+
+        // Create Notification
+        if (userId.toString() !== friendId.toString()) {
+            await notificationModal.create({
+                sender: userId,
+                receiver: friendId,
+                type: 'send request',
+                post: null,
+                message: 'send You a friend request',
+            });
+        }
 
         responseHandler(res, 200, "Friend Request send SuccessFully")
 
@@ -100,7 +112,7 @@ const getAllFriendRequest = async (req, res) => {
                 $in: loggedInUser.followers,
                 $nin: loggedInUser.followings,
             }
-        }).select("avatar name email createdAt")
+        }).select("avatar name email updatedAt")
 
         return responseHandler(res, 200, "Data fetched SuccessFully", userTOAcceptRequest);
 
@@ -145,6 +157,15 @@ const acceptFriendRequest = async (req, res) => {
 
         await loggedInUser.save();
         await senderUser.save();
+        if (loggedInUserId.toString() !== friendId.toString()) {
+            await notificationModal.create({
+                sender: loggedInUserId,
+                receiver: friendId,
+                type: 'accept request',
+                post: null,
+                message: 'accept your friend request',
+            });
+        }
 
         return responseHandler(res, 200, "Friend request accepted successfully");
 
@@ -156,7 +177,7 @@ const acceptFriendRequest = async (req, res) => {
 
 const getAllFriends = async (req, res) => {
     try {
-        const {userId} = req.params;
+        const { userId } = req.params;
 
         const loggedInUser = await userModal
             .findById(userId)

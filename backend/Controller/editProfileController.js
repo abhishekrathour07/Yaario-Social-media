@@ -35,7 +35,7 @@ const editCoverImage = async (req, res) => {
     const loggedInUser = await userModal.findById(loggedInUserId)
     loggedInUser.coverImage = mediaUrl
     loggedInUser.save()
-    return responseHandler(res, 200, "Profile picture updated successfully", loggedInUser);
+    return responseHandler(res, 200, "cover picture updated successfully", loggedInUser);
 
    } catch (error) {
         responseHandler(res, 500, "Internal Server Error")

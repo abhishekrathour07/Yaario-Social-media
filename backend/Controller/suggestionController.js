@@ -5,7 +5,7 @@ import responseHandler from "../utils/responseHandler.js"
 const getLoginUserDetail = async (req, res) => {
     try {
         const userId = req.user._id;
-        const allUsers = await userModal.findById(userId);
+        const allUsers = await userModal.findById(userId).select("id name avatar email coverImage followers followings");
         return responseHandler(res, 200, "Data fetched Successfully", allUsers);
     } catch (error) {
         console.log(error);

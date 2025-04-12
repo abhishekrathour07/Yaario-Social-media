@@ -3,8 +3,8 @@ import responseHandler from "../utils/responseHandler.js";
 
 const getBioDetails = async (req, res) => {
     try {
-        const loggedInUserId = req.user._id;
-        const bio = await bioModal.findOne({ user: loggedInUserId });
+        const {userId} = req.params;
+        const bio = await bioModal.findOne({ user: userId });
 
         if (!bio) {
             return responseHandler(res, 404, "Bio not found");
