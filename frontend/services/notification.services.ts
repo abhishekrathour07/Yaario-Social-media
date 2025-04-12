@@ -14,6 +14,18 @@ const notificationServices = {
         })
         return response.data
     },
+    markSingleNotification: async(notificationId:string) => {
+        const response = await axios.put(`${API_URL}/notifications/${notificationId}`,{
+            withCredentials: true,
+        })
+        return response.data
+    },
+    getSingleNotification: async(notificationId:string) => {
+        const response = await axios.get(`${API_URL}/single-notification/${notificationId}`,{
+            withCredentials: true,
+        })
+        return response.data
+    },
 
 }
 export default notificationServices 

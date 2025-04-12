@@ -14,6 +14,7 @@ import { Input } from '@/components/ui/input'
 import bioServices, { aboutType } from '@/services/bio.service'
 import { useUserStore } from '@/store/userStore'
 import { Edit } from 'lucide-react'
+import { useParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -21,13 +22,11 @@ import { toast } from 'sonner'
 const About = () => {
   const [isEditing, setIsEditing] = useState(false)
   const [data, setData] = useState<aboutType | null>(null)
-  const { userId, name } = useUserStore();
+  const { userId } = useUserStore();
 
+  const params= useParams();
+  const id = params?.id ;
 
-  const fetchUser = async () => {
-    const data = await useUserStore.getState().fetchUserDetails();
-
-  };
 
   const form = useForm<aboutType>({
     defaultValues: {
@@ -40,7 +39,7 @@ const About = () => {
 
   const fetchBioData = async () => {
     try {
-      const response = await bioServices.getBioDetail()
+      const response = await bioServices.getBioDetail(id as string)
       const bio = response?.data
       setData(bio)
       form.reset(bio)
@@ -51,7 +50,6 @@ const About = () => {
 
   useEffect(() => {
     fetchBioData()
-    fetchUser()
   }, [])
 
   const onSubmit = async (values: aboutType) => {
@@ -72,7 +70,7 @@ const About = () => {
           <Loader />
         </div> :
         <div>
-          {userId === data?.user && (
+          {userId === id && (
             <Button
               variant="ghost"
               size="icon"

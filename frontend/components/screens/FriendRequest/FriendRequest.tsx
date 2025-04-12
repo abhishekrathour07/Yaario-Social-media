@@ -98,7 +98,7 @@ const FriendRequest = () => {
               name={request?.name}
               imageurl={request?.avatar}
               mutualFriends={request.mutualFriends}
-              timeStamp={request.createdAt}
+              timeStamp={request.updatedAt}
               onAccept={() => handleAcceptRequest(request?._id)}
               onDelete={() => handleDeleteRequest(request?._id)}
             />

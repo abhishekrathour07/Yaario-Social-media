@@ -4,12 +4,13 @@ import React, { useEffect, useState } from 'react'
 import notificationServices from '@/services/notification.services'
 import { toast } from 'sonner'
 import moment from 'moment'
-import { Bell, CheckCheck, Heart, MessageCircle, UserPlus } from 'lucide-react'
+import { Bell, CheckCheck, Heart, MessageCircle, UserCheck, UserPlus } from 'lucide-react'
 import Loader from '@/components/customs/Loader/Loader'
+import { useRouter } from 'next/navigation'
 
 interface NotificationItem {
     _id: string
-    type: 'like' | 'comment' | 'follow' | 'save'
+    type: 'like' | 'comment' | 'send request' | 'save' | 'accept request'
     sender: {
         name: string
         avatar: string | null
@@ -22,6 +23,7 @@ interface NotificationItem {
 const Notification = () => {
     const [notifications, setNotifications] = useState<NotificationItem[]>([])
     const [loading, setLoading] = useState(true)
+    const router = useRouter()
 
     const getNotifications = async () => {
         try {
@@ -55,8 +57,10 @@ const Notification = () => {
                 return <Heart className="h-5 w-5 text-red-500" />
             case 'comment':
                 return <MessageCircle className="h-5 w-5 text-blue-500" />
-            case 'follow':
+            case 'send request':
                 return <UserPlus className="h-5 w-5 text-green-500" />
+            case 'accept request':
+                return <UserCheck className="h-5 w-5 text-pink-500" />
             default:
                 return <Bell className="h-5 w-5 text-yellow-500" />
         }
@@ -82,7 +86,7 @@ const Notification = () => {
                             </span>
                         )}
                     </div>
-                    <button className={`text-sm cursor-pointer flex gap-2  hover:underline ${notifications.length === 0 ? " text-gray-400" : "text-white"}`} onClick={handleMarkAllAsRead}>
+                    <button disabled={notifications.length === 0} className={` disabled:cursor-not-allowed text-sm cursor-pointer flex gap-2  hover:underline text-white`} onClick={handleMarkAllAsRead}>
                         <CheckCheck /> Mark all as read
                     </button>
                 </div>
@@ -93,9 +97,10 @@ const Notification = () => {
                         <p>No notifications yet</p>
                     </div>
                 ) : (
-                    <div className='space-y-4'>
+                    <div className='space-y-4' >
                         {notifications.map((notification) => (
                             <div
+                            onClick={()=>{router.push(`/notifications/${notification._id}`)}}
                                 key={notification._id}
                                 className={`flex items-start gap-4 p-4 rounded-lg cursor-pointer transition-colors
                                     ${notification.isRead ? 'bg-slate-800' : 'bg-slate-700 hover:bg-slate-600'}`}
@@ -111,10 +116,10 @@ const Notification = () => {
                                     <div className='flex items-center gap-2'>
                                         {getNotificationIcon(notification.type)}
                                         <p className='font-medium'>
-                                            <span className='hover:underline text-green-600 cursor-pointer'>
+                                            <span className='hover:underline text-green-500 cursor-pointer'>
                                                 {notification.sender.name}
                                             </span>{' '}
-                                            {notification.message}
+                                            <span>{notification.message}</span>
                                         </p>
                                     </div>
                                     <p className='text-sm text-gray-400 mt-1'>

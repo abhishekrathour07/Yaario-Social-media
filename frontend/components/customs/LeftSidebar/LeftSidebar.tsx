@@ -22,7 +22,7 @@ const LeftSidebar = () => {
       const response = await authService.logout();
       toast.success(response?.message)
       router.push('/login')
-      await useUserStore.getState().clearUser();
+       useUserStore.getState().clearUser();
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Something went wrong');
     }

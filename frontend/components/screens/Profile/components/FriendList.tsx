@@ -1,4 +1,5 @@
 "use client"
+import Loader from '@/components/customs/Loader/Loader'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Input } from '@/components/ui/input'
 import requestService from '@/services/friendRequest.service'
@@ -44,7 +45,7 @@ const FriendList = () => {
   if (loading) {
     return (
       <div className='bg-slate-800 p-4 rounded-lg flex items-center justify-center h-[200px]'>
-        <div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-white'></div>
+            <Loader/>
       </div>
     )
   }

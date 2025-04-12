@@ -5,6 +5,7 @@ import CreatePost from './components/CreatePost'
 import ViewPost from './components/ViewPost'
 import postServices from '@/services/post.services'
 import { toast } from 'sonner'
+import Loader from '@/components/customs/Loader/Loader'
 
 const Home = () => {
 
@@ -18,10 +19,21 @@ const Home = () => {
             toast.error(error?.response?.data?.message)
         }
     }
-
+    
+  
     useEffect(() => {
         handlePostData()
     }, [])
+
+    if (!data) {
+        return (
+            <div className='h-[100vh] flex justify-center items-center bg-slate-900'>
+                <Loader/>
+            </div>
+        )
+        
+    }
+
     return (
         <div className='bg-slate-900 h-screen py-4 sm:px-6 px-2 xl:px-16 text-white overflow-y-scroll no-scrollbar flex flex-col gap-4'>
             <CreatePost refreshFeed = {handlePostData}/>

@@ -10,8 +10,8 @@ export type aboutType = {
 }
 
 const bioServices = {
-    getBioDetail: async () => {
-        const response = await axios.get(`${API_URL}/bio-detail`, {
+    getBioDetail: async (userId:string) => {
+        const response = await axios.get(`${API_URL}/bio-detail/${userId}`, {
             withCredentials: true
         })
         return response.data

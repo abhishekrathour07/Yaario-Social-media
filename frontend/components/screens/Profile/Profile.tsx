@@ -32,30 +32,43 @@ const Profile = () => {
     const [iscoverOpen, setiscoverOpen] = useState<boolean>(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
-    console.log(selectedFile)
-
     const params = useParams();
     const { userId } = useUserStore()
-    const Id = params?.id || userId;
 
-    const userProfileData = async () => {
+   
+    useEffect(() => {
+
+        const Id = params?.id || userId;
+        if (!Id) return;
+        const fetchData = async () => {
+            await userDataById(Id as string);
+            await userProfileData(Id as string);
+        };
+    
+        fetchData();
+
+    }, [params?.id, userId]);
+
+
+    const userProfileData = async (Id: string) => {
         try {
-            const response = await postServices.getpostById(Id as string)
+            const response = await postServices.getpostById(Id)
             setProfileData(response?.data)
         } catch (error: any) {
             toast.error(error?.response?.data?.message);
 
         }
     }
-    const userDataById = async () => {
+    const userDataById = async (Id: string) => {
         try {
-            const response = await profileService.getProfileDetailById(Id as string)
+            const response = await profileService.getProfileDetailById(Id)
             setData(response?.data)
         } catch (error: any) {
             toast.error(error?.response?.data?.message);
 
         }
     }
+
     const handleEditProfilePic = async () => {
         try {
             if (!selectedFile) {
@@ -65,7 +78,6 @@ const Profile = () => {
             formData.append('avatar', selectedFile);
             const response = await profileService.editprofilePic(formData);
             toast.success(response?.message)
-            userDataById();
             setIsPhotoDialogOpen(false)
             setSelectedFile(null)
         } catch (error: any) {
@@ -82,7 +94,6 @@ const Profile = () => {
             formData.append('coverImage', selectedFile);
             const response = await profileService.editCoverImage(formData);
             toast.success(response?.message)
-            userDataById();
             setiscoverOpen(false)
             setSelectedFile(null)
         } catch (error: any) {
@@ -90,10 +101,7 @@ const Profile = () => {
 
         }
     }
-    useEffect(() => {
-        userProfileData();
-        userDataById();
-    }, [])
+
     const content: contentTypes = [
         {
             title: "Posts",
@@ -132,7 +140,7 @@ const Profile = () => {
 
     if (!data) {
         return (
-            <div className='h-full bg-slate-900 flex items-center justify-center'>
+            <div className='h-[100vh] bg-slate-900 flex items-center justify-center'>
                 <Loader />
             </div>
         )
