@@ -16,6 +16,7 @@ import savePostRouter from './Routes/savePostRoutes.js';
 import editProfileRouter from './Routes/editProfileRoutes.js';
 import notificationRouter from './Routes/notifcationRoutes.js';
 import storyRouter from './Routes/storyRoutes.js';
+import settingRouter from './Routes/settingRouter.js';
 
 dotenv.config()
 
@@ -44,6 +45,7 @@ app.use('/api/v1', authMiddleware, savePostRouter)//share a post Routes
 app.use('/api/v1', authMiddleware, editProfileRouter)//edit profile details Routes
 app.use('/api/v1', authMiddleware, notificationRouter)//edit profile details Routes
 app.use('/api/v1', authMiddleware, storyRouter)//edit profile details Routes
+app.use('/api/v1', authMiddleware, settingRouter)//edit profile details Routes
 
 app.listen(PORT, () => (
     console.log("Server is Running at Port " + PORT)
