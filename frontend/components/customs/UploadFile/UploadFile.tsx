@@ -1,5 +1,4 @@
 "use client"
-import { Button } from '@/components/ui/button'
 import { Upload } from 'lucide-react'
 import React, { useState } from 'react'
 
@@ -8,7 +7,6 @@ type UploadFileProps = {
     setSelectedFile: React.Dispatch<React.SetStateAction<File | null>>,
 }
 const UploadFile:React.FC<UploadFileProps> = ({
-    selectedFile,
     setSelectedFile,
 }) => {
     const [preview, setPreview] = useState<string | null>(null)

@@ -17,7 +17,7 @@ const ViewNotification = () => {
       setNotification(response?.data);
       setLoading(false)
       if (!response.data.isRead) {
-        const res = await notificationServices.markSingleNotification(notificationId as string)
+       // const res = await notificationServices.markSingleNotification(notificationId as string)
     }
     } catch (error: any) {
       toast.error(error?.response?.data?.message)

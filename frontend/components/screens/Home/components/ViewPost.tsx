@@ -99,7 +99,7 @@ const ViewPost: React.FC<ViewPostProps> = ({ postData, refreshFeed }) => {
         try {
             const response = await postServices.deletePost(postData._id);
             toast.success(response?.message);
-            refreshFeed && refreshFeed();
+            if (refreshFeed) refreshFeed();
         } catch (error: any) {
             toast.error(error?.response?.data?.message);
         }

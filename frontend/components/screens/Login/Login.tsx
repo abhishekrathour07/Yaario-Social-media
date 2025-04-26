@@ -78,7 +78,7 @@ const Login = () => {
             <CustomButton text='Login' onClick={form.handleSubmit(onSubmit)} className='w-full'>
             </CustomButton>
             <div className='text-center text-sm'>
-              <span className='text-gray-400'>Don't have an account? </span>
+              <span className='text-gray-400'>Don$&apos;t have an account? </span>
               <Link href="/register" className='text-purple-400 hover:text-purple-300'>
                 Register here
               </Link>

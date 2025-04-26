@@ -1,5 +1,4 @@
 import React from 'react'
-import { Search } from 'lucide-react'
 import SearchBox from '../SearchBox/SearchBox';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import CustomButton from '../CustomButton/CustomButton';
@@ -13,7 +12,7 @@ const RightSidebar = () => {
     ]
 
     const d = new Date();
-    let year = d.getFullYear();
+    const year = d.getFullYear();
 
     return (
         <div className="h-screen w-auto bg-slate-800 text-white p-4 relative ">

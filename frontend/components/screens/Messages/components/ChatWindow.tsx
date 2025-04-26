@@ -17,7 +17,7 @@ type ChatWindowProps = {
   onShowUserInfo: () => void
 }
 
-const ChatWindow: React.FC<ChatWindowProps> = ({ chatId, onShowUserInfo }) => {
+const ChatWindow: React.FC<ChatWindowProps> = ({  onShowUserInfo }) => {
   const [newMessage, setNewMessage] = React.useState('')
   const messagesEndRef = React.useRef<HTMLDivElement>(null)
 

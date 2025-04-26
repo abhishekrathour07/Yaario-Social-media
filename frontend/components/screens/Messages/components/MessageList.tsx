@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import { Search } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import SearchBox from '@/components/customs/SearchBox/SearchBox'
 
@@ -53,9 +52,9 @@ const MessageList: React.FC<MessageListProps> = ({ selectedChat, onSelectChat })
     <div className="h-full flex flex-col">
      <div className='p-4'>
      <SearchBox/>
-     </div>
+     </div >
 
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto" onClick={()=>setSearchQuery("qjhjjhe")}>
         {filteredConversations.map((conv) => (
           <div
             key={conv.id}
