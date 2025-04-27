@@ -1,5 +1,5 @@
 import express from 'express'
-import { getBioDetails, updateBioDetails } from '../controller/bioController.js'
+import { getBioDetails, updateBioDetails } from '../Controller/bioController.js'
 
 const bioRouter = express.Router()
 

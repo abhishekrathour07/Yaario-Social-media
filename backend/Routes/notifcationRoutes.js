@@ -1,5 +1,5 @@
 import express from 'express'
-import { getNotificationsById, getNotificationsByUser, markAllasRead, markSingleRead } from '../controller/notificationController.js'
+import { getNotificationsById, getNotificationsByUser, markAllasRead, markSingleRead } from '../Controller/notificationController.js'
 
 const notificationRouter = express.Router()
 

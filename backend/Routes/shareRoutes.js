@@ -1,5 +1,5 @@
 import express from "express";
-import sharePost from "../controller/shareController.js";
+import sharePost from "../Controller/shareController.js";
 
 const shareRouter = express.Router();
 

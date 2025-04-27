@@ -1,6 +1,6 @@
 // routes/storyRoutes.js
 import express from "express";
-import { createStory, deleteStory, getStories } from "../controller/storyController.js";
+import { createStory, deleteStory, getStories } from "../Controller/storyController.js";
 
 
 const storyRouter = express.Router();
