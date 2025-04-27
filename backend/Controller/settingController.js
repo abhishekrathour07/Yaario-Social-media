@@ -1,6 +1,6 @@
 import responseHandler from "../utils/responseHandler.js";
 import bcrypt from 'bcrypt'
-import userModal from '../models/userModal.js'
+import userModal from '../Models/userModal.js'
 
 
 
