@@ -1,5 +1,5 @@
 import express from 'express'
-import { friendSuggestion, getLoginUserDetail, getProfileDetail } from '../Controller/suggestionController.js';
+import { friendSuggestion, getLoginUserDetail, getProfileDetail } from '../controller/suggestionController.js';
 
 const SuggestionRouter = express.Router();
 

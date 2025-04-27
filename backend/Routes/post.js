@@ -1,5 +1,5 @@
 import express from "express";
-import { createPost, deletePostById, getAllPostByUserId, getAllPosts } from "../Controller/postController.js";
+import { createPost, deletePostById, getAllPostByUserId, getAllPosts } from "../controller/postController.js";
 import multer from "multer";
 
 const postRouter = express.Router();

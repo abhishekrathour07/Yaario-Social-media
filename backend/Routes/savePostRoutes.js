@@ -1,5 +1,5 @@
 import express from "express"
-import { getSavedPosts, toggleSavePost } from "../Controller/savePost.js"
+import { getSavedPosts, toggleSavePost } from "../controller/savePost.js"
 
 const savePostRouter = express.Router()
 

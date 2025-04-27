@@ -1,5 +1,5 @@
 import express from 'express';
-import { editCoverImage, editProfilePic } from '../Controller/editProfileController.js';
+import { editCoverImage, editProfilePic } from '../controller/editProfileController.js';
 import multer from 'multer';
 const editProfileRouter = express.Router();
 

@@ -22,10 +22,10 @@ export const signup = async (req, res) => {
             user: newUser._id
         });
         await newBio.save()
-       return responseHandler(res, 201, "User created successfully");
+        return responseHandler(res, 201, "User created successfully");
 
     } catch (error) {
-     responseHandler(res, 500, "Internal Server Error")
+        responseHandler(res, 500, "Internal Server Error")
     }
 }
 
@@ -50,10 +50,17 @@ export const login = async (req, res) => {
             { expiresIn: "24h" }
         );
 
+        const isProduction = process.env.NODE_ENV === 'production';
+
         res.cookie('auth_token', token, {
             httpOnly: true,
-            maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+            secure: isProduction,
+            domain: isProduction ? "job-vista-frontend.vercel.app" : "localhost",
+            path: "/",
+            sameSite: isProduction ? 'None' : 'Lax',
+            maxAge: 24 * 60 * 60 * 1000,
         });
+
         return responseHandler(res, 200, "Login Successfully", {
             name: existUser.name,
             userId: existUser._id,

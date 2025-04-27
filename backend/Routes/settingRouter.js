@@ -1,5 +1,5 @@
 import express from "express"
-import { deleteAccount, updatePassword, updatePrivacySettings } from "../Controller/settingController.js";
+import { deleteAccount, updatePassword, updatePrivacySettings } from "../controller/settingController.js";
 
 const settingRouter = express.Router();
 
