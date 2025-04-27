@@ -16,13 +16,15 @@ type createPostTypes = {
 }
 
 
-const CreatePost: React.FC<createPostTypes> = ({refreshFeed}) => {
+const CreatePost: React.FC<createPostTypes> = ({ refreshFeed }) => {
 
     const [caption, setCaption] = useState("");
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const [isPhotoDialogOpen, setIsPhotoDialogOpen] = useState<boolean>(false);
     const [timelineopen, setTimelineopen] = useState<boolean>(false);
     const { name, profileUrl } = useUserStore()
+    const [isLoading, setLoading] = useState(false)
+
 
     const handleEmojiSelect = (emoji: any) => {
         setCaption(prev => prev + emoji.native);
@@ -30,6 +32,7 @@ const CreatePost: React.FC<createPostTypes> = ({refreshFeed}) => {
 
     const handlecreatePost = async () => {
         try {
+            setLoading(true)
             if (!selectedFile) {
                 return toast.error('Please select an image');
             }
@@ -45,11 +48,15 @@ const CreatePost: React.FC<createPostTypes> = ({refreshFeed}) => {
 
         } catch (error: any) {
             toast.error(error?.response?.data?.message || 'Failed to create post');
+        } finally {
+            setLoading(false)
         }
     };
 
     const handleTimeline = async () => {
         try {
+            setLoading(true)
+
             const payload = {
                 caption: caption,
                 postImageUrl: null
@@ -62,6 +69,9 @@ const CreatePost: React.FC<createPostTypes> = ({refreshFeed}) => {
 
         } catch (error: any) {
             toast.error(error?.response?.data?.message || 'Failed to create post');
+        } finally {
+            setLoading(false)
+
         }
     };
 
@@ -119,7 +129,7 @@ const CreatePost: React.FC<createPostTypes> = ({refreshFeed}) => {
                         </div>
                         <UploadFile selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
                         <div className='flex w-full'>
-                            <CustomButton text='Upload' className='w-full' onClick={handlecreatePost}></CustomButton>
+                            <CustomButton text='Upload' isLoading={isLoading} className='w-full' onClick={handlecreatePost}></CustomButton>
                         </div>
                     </DialogContent>
                 </Dialog>
@@ -140,7 +150,7 @@ const CreatePost: React.FC<createPostTypes> = ({refreshFeed}) => {
                                 <EmojiPicker onEmojiSelect={handleEmojiSelect} />
                             </div>
                             <div className='flex w-full'>
-                                <CustomButton text='Upload' className='w-full' onClick={handleTimeline}></CustomButton>
+                                <CustomButton text='Upload' isLoading={isLoading} className='w-full' onClick={handleTimeline}></CustomButton>
                             </div>
 
                         </div>

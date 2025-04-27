@@ -21,10 +21,12 @@ import settingRouter from './Routes/settingRouter.js';
 dotenv.config()
 
 const app = express();
-const PORT = process.env.PORT || 4005;
+const PORT =  4005;
 
 connectedDB()
 app.use(cookieParser())
+
+app.use(express.json());
 
 const allowedOrigins = [
     "http://localhost:3000",

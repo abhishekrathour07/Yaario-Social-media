@@ -1,7 +1,7 @@
 "use client"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
@@ -14,6 +14,7 @@ import { useUserStore } from '@/store/userStore'
 
 
 const Login = () => {
+  const [loading, isLoading] = useState(false)
   const form = useForm<LoginData>({
     resolver: zodResolver(LoginValidationSchema),
     defaultValues: {
@@ -23,6 +24,7 @@ const Login = () => {
   })
   const router = useRouter();
   const onSubmit = async (data: LoginData) => {
+    isLoading(true)
     try {
       const response = await authService.login(data);
       toast.success(response?.message);
@@ -31,6 +33,8 @@ const Login = () => {
 
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
+    } finally {
+      isLoading(false)
     }
   };
   return (
@@ -75,7 +79,7 @@ const Login = () => {
                 </FormItem>
               )}
             />
-            <CustomButton text='Login' onClick={form.handleSubmit(onSubmit)} className='w-full'>
+            <CustomButton isLoading={loading} text='Login' onClick={form.handleSubmit(onSubmit)} className='w-full'>
             </CustomButton>
             <div className='text-center text-sm'>
               <span className='text-gray-400'>Don$&apos;t have an account? </span>

@@ -7,9 +7,10 @@ interface suggestionProps {
   imageurl: string;
   mutualFriends: number;
   onSendRequest: () => void;
+  loading: boolean
 }
 
-const FriendSuggestionCards: React.FC<suggestionProps> = ({ name, imageurl, mutualFriends =20, onSendRequest }) => {
+const FriendSuggestionCards: React.FC<suggestionProps> = ({ loading, name, imageurl, mutualFriends = 20, onSendRequest }) => {
   return (
     <div className='bg-slate-800 p-4 rounded-lg flex gap-4'>
       <Avatar className="h-20 w-20">
@@ -26,8 +27,9 @@ const FriendSuggestionCards: React.FC<suggestionProps> = ({ name, imageurl, mutu
         </div>
         <p className='text-gray-500'>{mutualFriends} mutual friends</p>
         <div className='flex gap-4'>
-          <CustomButton 
-            text='Add Friend' 
+          <CustomButton
+            isLoading={loading}
+            text='Add Friend'
             className='w-full'
             onClick={onSendRequest}
           />

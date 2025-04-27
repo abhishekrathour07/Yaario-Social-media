@@ -1,7 +1,7 @@
 "use client"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
@@ -14,6 +14,9 @@ import { useRouter } from 'next/navigation'
 
 
 const Signup = () => {
+
+      const [isLoading, setLoading] = useState(false)
+    
     const form = useForm<SignupData>({
         resolver: zodResolver(SignupValidationSchema),
         defaultValues: {
@@ -25,12 +28,15 @@ const Signup = () => {
     const router = useRouter();
     const onSubmit = async (data: SignupData) => {
         try {
+            setLoading(true)
             const response = await authService.signup(data);
             toast.success(response?.message);
             router.push('/login');
         } catch (error: any) {
             console.log(error);
             toast.error(error?.response?.data?.message);
+        }finally{
+            setLoading(true)
         }
     };
 
@@ -94,7 +100,7 @@ const Signup = () => {
                                 </FormItem>
                             )}
                         />
-                        <CustomButton text='Login' onClick={form.handleSubmit(onSubmit)} className='w-full'>
+                        <CustomButton text='Login' isLoading={isLoading} onClick={form.handleSubmit(onSubmit)} className='w-full'>
                         </CustomButton>
                         <div className='text-center text-sm'>
                             <span className='text-gray-400'>Already have an account? </span>

@@ -10,55 +10,69 @@ import NotFound from '@/components/customs/Noresult/NotFound'
 const FriendRequest = () => {
   const [friendRequests, setFriendRequests] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingMap, setLoadingMap] = useState(new Map<string, boolean>()); 
+  const [postloading, setpostloading] = useState(false);
 
   const getFriendRequests = async () => {
+    setpostloading(true)
     try {
       const response = await requestService.friendRequests();
       setFriendRequests(response?.data);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to fetch friend requests');
+    } finally {
+      setpostloading(false)
     }
   };
-  console.log(friendRequests)
+
   const getFriendSuggestions = async () => {
     try {
+      setpostloading(true)
       const response = await requestService.friendSuggestion();
       setSuggestions(response?.data);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to fetch suggestions');
     } finally {
-      setLoading(false);
+      setpostloading(false);
     }
   };
 
   const handleSendRequest = async (friendId: string) => {
+    setLoadingMap((prev) => new Map(prev).set(friendId, true)); 
     try {
       await requestService.sendRequest(friendId);
       toast.success('Friend request sent successfully');
       getFriendSuggestions();
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to send request');
+    } finally {
+      setLoadingMap((prev) => new Map(prev).set(friendId, false)); 
     }
   };
 
   const handleDeleteRequest = async (friendId: string) => {
+    setLoadingMap((prev) => new Map(prev).set(friendId, true)); 
     try {
       await requestService.deleteRequest(friendId);
       toast.success('Friend request deleted successfully');
       getFriendRequests();
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to delete request');
+    } finally {
+      setLoadingMap((prev) => new Map(prev).set(friendId, false)); 
     }
   };
 
   const handleAcceptRequest = async (friendId: string) => {
+    setLoadingMap((prev) => new Map(prev).set(friendId, true));
     try {
       await requestService.acceptFriendRequest(friendId);
       toast.success('Friend request accepted successfully');
       getFriendRequests();
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to accept request');
+    } finally {
+      setLoadingMap((prev) => new Map(prev).set(friendId, false)); 
     }
   };
 
@@ -67,7 +81,7 @@ const FriendRequest = () => {
     getFriendSuggestions();
   }, []);
 
-  if (loading) {
+  if (postloading) {
     return (
       <div className='bg-slate-900 h-screen p-4 flex items-center justify-center'>
         <Loader />
@@ -89,7 +103,7 @@ const FriendRequest = () => {
         </button>
       </div>
       {friendRequests.length === 0 && (
-       <NotFound text='No friend request found' className='h-40 '/>
+        <NotFound text='No friend request found' className='h-40 ' />
       )}
       <div className='grid md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-4 mt-4 mb-4'>
         {friendRequests.slice(0, 10).map((request: any, index: number) => (
@@ -99,6 +113,7 @@ const FriendRequest = () => {
               imageurl={request?.avatar}
               mutualFriends={request.mutualFriends}
               timeStamp={request.updatedAt}
+              loading={loadingMap.get(request._id) || false} // Use loading state for this specific request
               onAccept={() => handleAcceptRequest(request?._id)}
               onDelete={() => handleDeleteRequest(request?._id)}
             />
@@ -117,6 +132,7 @@ const FriendRequest = () => {
           {suggestions.slice(0, 10).map((user: any, index: number) => (
             <div key={user._id || index}>
               <FriendSuggestionCards
+                loading={loadingMap.get(user._id) || false} 
                 name={user.name}
                 imageurl={user.avatar}
                 mutualFriends={user.mutualFriends}

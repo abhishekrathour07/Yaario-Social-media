@@ -1,16 +1,9 @@
 import express from 'express';
 import { editCoverImage, editProfilePic } from '../Controller/editProfileController.js';
-import multer from 'multer';
+import { multerMiddleware } from '../config/cloudinary.js';
 const editProfileRouter = express.Router();
 
-const storage = multer.diskStorage({
-    destination: "uploads",
-    filename: (req, file, cb) => {
-        return cb(null, `${Date.now()}_${file.originalname}`);
-    }
-});
-const upload = multer({ storage: storage });
-editProfileRouter.put('/profile-pic/edit',upload.single("avatar"), editProfilePic);
-editProfileRouter.put('/cover-pic/edit',upload.single("coverImage"), editCoverImage);
+editProfileRouter.put('/profile-pic/edit',multerMiddleware.single("avatar"), editProfilePic);
+editProfileRouter.put('/cover-pic/edit',multerMiddleware.single("coverImage"), editCoverImage);
 
 export default editProfileRouter;

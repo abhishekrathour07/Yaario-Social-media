@@ -8,10 +8,11 @@ interface requestProps {
   mutualFriends: number;
   timeStamp: string;
   onAccept: () => void;
-  onDelete: () => void;  // Add this line
+  onDelete: () => void;
+  loading: boolean
 }
 
-const FriendRequestCards: React.FC<requestProps> = ({ name, imageurl, mutualFriends =30, timeStamp, onDelete, onAccept }) => {
+const FriendRequestCards: React.FC<requestProps> = ({ loading, name, imageurl, mutualFriends = 30, timeStamp, onDelete, onAccept }) => {
   return (
     <div className='bg-slate-800 p-4 rounded-lg flex gap-4 space-y-4'>
       <Avatar className="h-20 w-20">
@@ -29,8 +30,8 @@ const FriendRequestCards: React.FC<requestProps> = ({ name, imageurl, mutualFrie
         </div>
         <p className='text-gray-500'>{mutualFriends} mutual friends</p>
         <div className='flex gap-4'>
-          <CustomButton onClick={onAccept} text='Confirm' className='w-full' />
-          <button onClick={onDelete} className='bg-transparent border rounded-md w-full text-white'>Cancel</button>
+          <CustomButton isLoading={loading} onClick={onAccept} text='Confirm' className='w-full' />
+          <button onClick={onDelete}  className='bg-transparent border rounded-md w-full text-white'>Cancel</button>
         </div>
       </div>
     </div>
