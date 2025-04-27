@@ -1,6 +1,7 @@
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
+import { Readable } from "stream";
 
 dotenv.config();
 
@@ -10,22 +11,26 @@ cloudinary.config({
     api_secret: process.env.CLOUDANARY_SECRETS
 });
 
-const uploadFileToCloudinary = (file) => {
-    return new Promise((resolve, reject) => {  
-        const options = {
-            resource_type: file.mimetype.startsWith("video") ? "video" : "image"
-        };
+const storage = multer.memoryStorage();
+const multerMiddleware = multer({ storage });
 
-        cloudinary.uploader.upload_large(file.path, options, (error, result) => {
-            if (error) {
-                return reject(error);
+const uploadFileToCloudinary = (file) => {
+    return new Promise((resolve, reject) => {
+        const resourceType = file.mimetype.startsWith("video") ? "video" : "image";
+
+        const stream = cloudinary.uploader.upload_stream(
+            { resource_type: resourceType },
+            (error, result) => {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(result);
             }
-            resolve(result);
-        });
+        );
+
+        const readableStream = Readable.from(file.buffer);
+        readableStream.pipe(stream);
     });
 };
-
-//  Multer middleware for file uploads (temporary storage in "uploads/" folder)
-const multerMiddleware = multer({ dest: "uploads/" });
 
 export { multerMiddleware, uploadFileToCloudinary };

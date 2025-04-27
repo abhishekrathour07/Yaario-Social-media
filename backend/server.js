@@ -21,15 +21,28 @@ import settingRouter from './Routes/settingRouter.js';
 dotenv.config()
 
 const app = express();
-const PORT = 4005;
+const PORT = process.env.PORT || 4005;
 
 connectedDB()
 app.use(cookieParser())
+
+const allowedOrigins = [
+    "http://localhost:3000",
+    "https://yaario-social-media-frontend.vercel.app"
+];
+
 app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("CORS not allowed"));
+        }
+    },
+    credentials: true,
 }));
-app.use(express.json())
+
 
 // These are the all router detail
 
