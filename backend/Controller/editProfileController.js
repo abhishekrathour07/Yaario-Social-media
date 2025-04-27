@@ -1,4 +1,4 @@
-import userModal from '../models/userModal.js';
+import userModal from '../Models/userModal.js';
 import responseHandler from '../utils/responseHandler.js';
 import { uploadFileToCloudinary } from '../config/cloudinary.js'
 

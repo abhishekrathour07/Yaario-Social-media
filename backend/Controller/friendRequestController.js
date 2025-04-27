@@ -1,5 +1,5 @@
 import notificationModal from "../Models/NotificationModal.js";
-import userModal from "../models/userModal.js";
+import userModal from "../Models/userModal.js";
 import responseHandler from "../utils/responseHandler.js";
 
 
