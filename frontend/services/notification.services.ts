@@ -1,5 +1,7 @@
-import { API_URL } from "@/routesbackend"
+
 import axios from "axios"
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 
 const notificationServices = {
     getNotifications: async () => {

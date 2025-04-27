@@ -1,19 +1,21 @@
-import { API_URL } from "@/routesbackend"
+
 import axios from "axios"
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export interface Story {
-  _id: string;
-  userId: string;
-  media: {
-    mediaUrl: string;
-    mediaType: "image" | "video";
-    createdAt: string;
-    viewers?: {
-      userId: string;
-      viewedAt: string;
+    _id: string;
+    userId: string;
+    media: {
+        mediaUrl: string;
+        mediaType: "image" | "video";
+        createdAt: string;
+        viewers?: {
+            userId: string;
+            viewedAt: string;
+        }[];
     }[];
-  }[];
-  isActive: boolean;
-  createdAt: string;
+    isActive: boolean;
+    createdAt: string;
 }
 const storyService = {
     createStory: async (formdata: any) => {
