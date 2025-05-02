@@ -54,7 +54,6 @@ export const login = async (req, res) => {
 
         res.cookie('auth_token', token, {
             httpOnly: true,
-            secure: true,
             maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
         });
         return responseHandler(res, 200, "Login Successfully", {

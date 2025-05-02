@@ -7,7 +7,12 @@ import responseHandler from "../utils/responseHandler.js";
 const createStory = async (req, res) => {
     try {
         const userId = req.user._id;
-        let { storyImage } = req.body;
+        const storyImage = req.file;
+
+        if (!storyImage) {
+            return responseHandler(res, 400, "No story image uploaded");
+        }
+
 
         let mediaUrl = null;
         let mediaType = null;
@@ -15,7 +20,7 @@ const createStory = async (req, res) => {
         if (storyImage) {
             const uploadToCloudinary = await uploadFileToCloudinary(storyImage);
             mediaUrl = uploadToCloudinary?.secure_url;
-            mediaType = postImageUrl.mimetype.startsWith("video") ? "video" : "image";
+            mediaType = storyImage.mimetype.startsWith("video") ? "video" : "image";
         }
 
         const newMedia = {
@@ -36,9 +41,10 @@ const createStory = async (req, res) => {
         return responseHandler(res, 201, "Story added successfully", userStory);
     } catch (error) {
         console.error("Story creation error:", error);
-        return responseHandler(res, 500, "Error creating story", error);
+        return responseHandler(res, 500, "Error creating story", {error:error.message});
     }
 };
+
 
 
 

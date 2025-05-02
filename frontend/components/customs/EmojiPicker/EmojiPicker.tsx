@@ -19,7 +19,6 @@ const EmojiPicker: React.FC<EmojiPickerProps> = ({ onEmojiSelect }) => {
                     <Picker
                         theme="dark"
                         previewPosition="none"
-                        emojiTooltip={false}
                         skinTonePosition="none"
                         perLine={8}
                         data={data}

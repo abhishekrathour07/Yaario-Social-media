@@ -1,9 +1,13 @@
 'use client'
 
+import CustomButton from '@/components/customs/CustomButton/CustomButton'
+import UploadFile from '@/components/customs/UploadFile/UploadFile'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import storyService from '@/services/story.service'
 import { ArrowLeft, ArrowRight, PlusCircle, X } from 'lucide-react'
 import React, { useEffect, useState, useRef } from 'react'
+import { toast } from 'sonner'
 
 const Stories = () => {
     const [data, setData] = useState<any[]>([])
@@ -12,14 +16,40 @@ const Stories = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [progress, setProgress] = useState<number>(0)
     const intervalRef = useRef<any>(null)
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const [loading, isLoading] = useState(false)
+    const [isPhotoDialogOpen, setIsPhotoDialogOpen] = useState<boolean>(false);
+
+
 
     const handlegetStories = async () => {
         try {
             const response = await storyService.getStories()
             setData(response.data)
-        } catch (error) {
-            console.log(error)
+        } catch (error: any) {
+            toast.error(error.response?.data?.message)
+
             setData([])
+        }
+    }
+
+    const handleCreateStory = async () => {
+        try {
+            isLoading(true)
+            if (!selectedFile) {
+                return toast.error('Please select an image');
+            }
+            const formdata = new FormData();
+            formdata.append("storyImage", selectedFile)
+            const response = await storyService.createStory(formdata)
+            toast.success(response?.message)
+            handlegetStories();
+            setSelectedFile(null)
+            setIsPhotoDialogOpen(false)
+        } catch (error: any) {
+            toast.error(error.response?.data?.message)
+        } finally {
+            isLoading(false)
         }
     }
 
@@ -81,7 +111,20 @@ const Stories = () => {
                     <div className="cursor-pointer">
                         <div className="relative w-32 h-48 rounded-lg overflow-hidden group">
                             <div className="w-full h-full bg-slate-700 flex items-center justify-center">
-                                <PlusCircle className="w-10 h-10 text-blue-500" />
+                                <Dialog open={isPhotoDialogOpen} onOpenChange={setIsPhotoDialogOpen}>
+                                    <DialogTrigger asChild>
+                                        <PlusCircle className="w-10 h-10 text-blue-500" />
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[425px] bg-slate-800 text-white">
+                                        <DialogHeader>
+                                            <DialogTitle>Upload Photo/Video</DialogTitle>
+                                        </DialogHeader>
+                                        <UploadFile selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+                                        <div className='flex w-full'>
+                                            <CustomButton text='Upload' isLoading={loading} className='w-full' onClick={handleCreateStory}></CustomButton>
+                                        </div>
+                                    </DialogContent>
+                                </Dialog>
                             </div>
                             <p className="absolute bottom-2 left-2 text-white text-sm font-medium">
                                 Create Story

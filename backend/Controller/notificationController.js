@@ -67,4 +67,5 @@ const markSingleRead = async (req, res) => {
 };
 
 
+
 export { getNotificationsByUser, markAllasRead, markSingleRead, getNotificationsById }

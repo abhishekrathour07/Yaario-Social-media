@@ -125,7 +125,9 @@ const CreatePost: React.FC<createPostTypes> = ({ refreshFeed }) => {
                                 value={caption}
                                 onChange={(e) => setCaption(e.target.value)}
                             />
-                            <EmojiPicker onEmojiSelect={handleEmojiSelect} />
+                            <div onClick={(e) => e.stopPropagation()}>
+                                <EmojiPicker onEmojiSelect={handleEmojiSelect} />
+                            </div>
                         </div>
                         <UploadFile selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
                         <div className='flex w-full'>
