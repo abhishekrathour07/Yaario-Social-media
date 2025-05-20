@@ -11,10 +11,12 @@ import { authService, LoginData } from '@/services/auth.service'
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation'
 import { useUserStore } from '@/store/userStore'
+import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision'
 
 
 const Login = () => {
   const [loading, isLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const form = useForm<LoginData>({
     resolver: zodResolver(LoginValidationSchema),
     defaultValues: {
@@ -38,59 +40,90 @@ const Login = () => {
     }
   };
   return (
-    <div className='bg-gradient-to-r from-blue-500 to-teal-500 h-[100vh] flex justify-center items-center'>
-      <div className='p-8 bg-slate-800 text-white rounded-lg shadow-lg w-96 space-y-6 border border-slate-700'>
+    <BackgroundBeamsWithCollision className='min-h-screen bg-gradient-to-br from-blue-800 to-pink-800'>
+      <div className="bg-slate-900 rounded-xl shadow-xl w-full max-w-md p-8 space-y-6 text-white">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center">Welcome back! Login here</h2>
+
         <Form {...form}>
-          <div className='space-y-6'>
-            <h1 className='text-2xl font-bold text-center mb-6'>Welcome Back</h1>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-300">Email</FormLabel>
+          {/* Email Field */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">Email <span className="text-red-500">*</span></FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="you@example.com"
+                    className="bg-slate-800 border border-slate-700 text-white placeholder:text-slate-400"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Password Field */}
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-medium">Password <span className="text-red-500">*</span></FormLabel>
+                <div className="relative">
                   <FormControl>
                     <Input
-                      type="email"
-                      placeholder='Enter your email'
-                      className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      className="bg-slate-800 border border-slate-700 text-white placeholder:text-slate-400 pr-10"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className='text-sm text-red-400' />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-300">Password</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder='Enter your password'
-                      className="bg-slate-700 border-slate-600 text-white placeholder:text-gray-400"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className='text-sm text-red-400' />
-                </FormItem>
-              )}
-            />
-            <CustomButton isLoading={loading} text='Login' onClick={form.handleSubmit(onSubmit)} className='w-full'>
-            </CustomButton>
-            <div className='text-center text-sm'>
-              <span className='text-gray-400'>Don$&apos;t have an account? </span>
-              <Link href="/register" className='text-purple-400 hover:text-purple-300'>
-                Register here
-              </Link>
-            </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-2.5 text-gray-400 hover:text-white"
+                  >
+                    {showPassword ? "🙈" : "👁️"}
+                  </button>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Forgot password */}
+          <div className="text-right text-sm">
+            <Link href="/forgot-password" className="text-indigo-400 hover:underline">
+              Forgot password?
+            </Link>
           </div>
+
+          <CustomButton
+            text="Login"
+            isLoading={loading}
+            onClick={form.handleSubmit(onSubmit)}
+            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-md"
+          />
+
         </Form>
+
+        <div className="text-sm text-center text-gray-400">
+          Don&apos;t have an account?{" "}
+          <Link href="/register" className="text-indigo-400 hover:underline">Signup</Link>
+        </div>
+
+        {/* Footer */}
+        <div className="pt-4 text-center">
+          <h3 className="text-xl font-semibold text-indigo-500">Yaario</h3>
+          <p className="text-xs text-gray-500 mt-1">© {new Date().getFullYear()} Yaario. All rights reserved.</p>
+        </div>
       </div>
-    </div>
+    </BackgroundBeamsWithCollision>
+
+
   )
 }
 
