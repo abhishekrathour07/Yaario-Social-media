@@ -32,7 +32,8 @@ export const useUserStore = create<UserState>()(
       // Fetch user details from the API
       fetchUserDetails: async () => {
         try {
-          const response = await axios.get('http://localhost:4005/api/v1/user-detail', {
+          const API_URL = process.env.NEXT_PUBLIC_API_URL;
+          const response = await axios.get(`${API_URL}/user-detail`, {
             withCredentials: true
           });
 
