@@ -27,9 +27,11 @@ connectedDB()
 app.use(cookieParser())
 app.use(express.json());
 
-const allowedOrigins = [ process.env.FRONTEND_URL,
+const allowedOrigins = [
+    process.env.FRONTEND_URL,
     "http://localhost:3000",
-    "https://yaario-social-media-frontend.vercel.app"
+    "https://yaario-social-media-frontend.vercel.app",
+    "https://*.vercel.app" // Allow all vercel preview deployments
 ];
 
 app.use(cors({

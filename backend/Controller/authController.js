@@ -52,13 +52,19 @@ export const login = async (req, res) => {
             { expiresIn: "24h" }
         );
 
-        res.cookie('auth_token', token, {
+        const cookieOptions = {
             maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
             httpOnly: true,
-            secure:true,
-            sameSite:"none",
-            path:"/"
-        });
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+            path: "/",
+            domain: process.env.NODE_ENV === 'production' ? undefined : undefined
+        };
+        
+        console.log('Setting cookie with options:', cookieOptions);
+        console.log('NODE_ENV:', process.env.NODE_ENV);
+        
+        res.cookie('auth_token', token, cookieOptions);
         return responseHandler(res, 200, "Login Successfully", {
             name: existUser.name,
             userId: existUser._id,
@@ -71,11 +77,11 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-    res.clearCookie('auth_token',{
-            httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            path: '/',
-        });
+    res.clearCookie('auth_token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        path: '/',
+    });
     responseHandler(res, 200, "Logout Successfully");
 };
