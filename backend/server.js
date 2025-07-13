@@ -21,7 +21,7 @@ import settingRouter from './Routes/settingRouter.js';
 dotenv.config()
 
 const app = express();
-const PORT = 4005;
+const PORT = process.env.PORT || 4050;
 
 connectedDB()
 app.use(cookieParser())
