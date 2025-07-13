@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/customs/Navbar/Navbar";
 import { Toaster } from 'sonner';
+import { cookies } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,20 +20,26 @@ export const metadata: Metadata = {
   description: "Social media platform friend connection ,share your idea , connect to world",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const tokenPromise = cookies();
+  const token = (await tokenPromise).get('auth_token')?.value || '';
+  const showNavbar = Boolean(token);
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-slate-900`}
       >
-        <div className="block md:hidden">
-          <Navbar />
-        </div>
-        <main className="pt-16 md:pt-0">
+        {showNavbar && (
+          <div className="block md:hidden">
+            <Navbar />
+          </div>
+        )}
+        <main className={showNavbar ? "pt-16 md:pt-0" : "pt-0"}>
           {children}
         </main>
         <Toaster 

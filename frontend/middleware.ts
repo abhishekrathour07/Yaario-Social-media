@@ -3,24 +3,22 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname
-  const isPublicPath = path === '/login' || path === '/register' || path === '/home' || path === '/'
+  const isPublicPath = path === '/login' || path === '/register'
   const token = request.cookies.get('auth_token')?.value || ''
 
-  // Redirect authenticated users away from login/register pages
-  if ((path === '/login' || path === '/register') && token) {
-    return NextResponse.redirect(new URL('/home', request.url))
-  }
-
-  // Handle root path - redirect to home (which is now public)
   if (path === '/') {
+    if (token) {
+      return NextResponse.redirect(new URL('/home', request.url))
+    } else {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+  }
+
+  if (isPublicPath && token) {
     return NextResponse.redirect(new URL('/home', request.url))
   }
 
-  // Protected routes that require authentication
-  const protectedRoutes = ['/profile', '/messages', '/friend-requests', '/notifications', '/saved', '/settings', '/varification']
-  const isProtectedRoute = protectedRoutes.some(route => path.startsWith(route))
-
-  if (isProtectedRoute && !token) {
+  if (!isPublicPath && !token) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 }
@@ -30,6 +28,7 @@ export const config = {
     '/',
     '/login',
     '/register',
+    '/home',
     '/profile/:path*',
     '/messages/:path*',
     '/friend-requests',
