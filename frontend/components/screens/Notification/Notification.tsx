@@ -86,7 +86,7 @@ const Notification = () => {
                             </span>
                         )}
                     </div>
-                    <button disabled={notifications.length === 0} className={` disabled:cursor-not-allowed text-sm cursor-pointer flex gap-2  hover:underline text-white`} onClick={handleMarkAllAsRead}>
+                    <button disabled={notifications?.length === 0} className={` disabled:cursor-not-allowed text-sm cursor-pointer flex gap-2  hover:underline text-white`} onClick={handleMarkAllAsRead}>
                         <CheckCheck /> Mark all as read
                     </button>
                 </div>
@@ -100,15 +100,15 @@ const Notification = () => {
                     <div className='space-y-4' >
                         {notifications.map((notification) => (
                             <div
-                            onClick={()=>{router.push(`/notifications/${notification._id}`)}}
-                                key={notification._id}
+                            onClick={()=>{router.push(`/notifications/${notification?._id}`)}}
+                                key={notification?._id}
                                 className={`flex items-start gap-4 p-4 rounded-lg cursor-pointer transition-colors
-                                    ${notification.isRead ? 'bg-slate-800' : 'bg-slate-700 hover:bg-slate-600'}`}
+                                    ${notification?.isRead ? 'bg-slate-800' : 'bg-slate-700 hover:bg-slate-600'}`}
                             >
                                 <Avatar className="h-12 w-12">
                                     <AvatarImage
-                                        src={notification.sender.avatar ||
-                                            `https://ui-avatars.com/api/?name=${notification.sender.name}`}
+                                        src={notification?.sender?.avatar ||
+                                            `https://ui-avatars.com/api/?name=${notification?.sender?.name}`}
                                     />
                                 </Avatar>
 
@@ -117,17 +117,17 @@ const Notification = () => {
                                         {getNotificationIcon(notification.type)}
                                         <p className='font-medium'>
                                             <span className='hover:underline text-green-500 cursor-pointer'>
-                                                {notification.sender.name}
+                                                {notification?.sender?.name}
                                             </span>{' '}
                                             <span>{notification.message}</span>
                                         </p>
                                     </div>
                                     <p className='text-sm text-gray-400 mt-1'>
-                                        {moment(notification.createdAt).fromNow()}
+                                        {moment(notification?.createdAt).fromNow()}
                                     </p>
                                 </div>
 
-                                {!notification.isRead && (
+                                {!notification?.isRead && (
                                     <div className='h-2 w-2 rounded-full bg-blue-500'></div>
                                 )}
                             </div>

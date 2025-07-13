@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation'
 import { useUserStore } from '@/store/userStore'
 import { BackgroundBeamsWithCollision } from '@/components/ui/background-beams-with-collision'
 import { Button } from '@/components/ui/button'
+import { UserCircle2 } from 'lucide-react'
 
 
 const Login = () => {
@@ -40,9 +41,14 @@ const Login = () => {
       isLoading(false)
     }
   };
+
+  const handleGuestLogin = () => {
+    form.setValue('email', 'sonu@gmail.com')
+    form.setValue('password', '12345678')
+  }
   return (
     <BackgroundBeamsWithCollision className='min-h-screen bg-gradient-to-br from-blue-800 to-pink-800'>
-      <div className="bg-slate-900 rounded-xl shadow-xl w-full max-w-md p-8 space-y-4 text-white">
+      <div className="bg-slate-900  shadow-xl w-full max-w-md p-8 space-y-4 text-white">
         <h2 className="text-2xl sm:text-3xl font-bold text-center">Welcome back! Login here</h2>
 
         <Form {...form}>
@@ -108,14 +114,7 @@ const Login = () => {
             onClick={form.handleSubmit(onSubmit)}
             className="w-full bg-indigo-600 hover:bg-indigo-500 h-10 text-white font-semibold rounded-md"
           />
-          <Button className="w-full h-10 hover:bg-slate-400 bg-slate-300 text-black">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px">
-              <path fill="#FFC107" d="M43.6,20.5h-1.8V20H24v8h11.3C34,32.4,29.6,36,24,36c-6.6,0-12-5.4-12-12s5.4-12,12-12c3.1,0,5.9,1.2,8,3.1l6-6C34.5,6.5,29.5,4,24,4C12.9,4,4,12.9,4,24s8.9,20,20,20c11,0,20-8,20-20C44,22.7,43.8,21.6,43.6,20.5z" />
-              <path fill="#FF3D00" d="M6.3,14.7l6.6,4.8C14.1,16,18.7,13,24,13c3.1,0,5.9,1.2,8,3.1l6-6C34.5,6.5,29.5,4,24,4C16,4,9,8.7,6.3,14.7z" />
-              <path fill="#4CAF50" d="M24,44c5.3,0,10.3-1.8,14.1-4.9l-6.5-5.3c-2,1.4-4.5,2.2-7.6,2.2c-5.6,0-10.3-3.6-12-8.5l-6.6,5.1C9,38.7,16,44,24,44z" />
-              <path fill="#1976D2" d="M43.6,20.5h-1.8V20H24v8h11.3c-1.4,3.7-4.6,6.6-8.3,8.2l6.5,5.3c3.8-3.5,6-8.7,6-14.5C44,22.7,43.8,21.6,43.6,20.5z" />
-            </svg>
-            Login with Google</Button>
+          <Button className="w-full h-10 hover:bg-slate-400 bg-slate-300 text-black" onClick={handleGuestLogin}><UserCircle2/>  Guest Login</Button>
 
         </Form>
 

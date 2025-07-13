@@ -53,8 +53,11 @@ export const login = async (req, res) => {
         );
 
         res.cookie('auth_token', token, {
-            httpOnly: true,
             maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+            httpOnly: true,
+            secure:true,
+            sameSite:"none",
+            path:"/"
         });
         return responseHandler(res, 200, "Login Successfully", {
             name: existUser.name,
@@ -68,6 +71,11 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-    res.clearCookie('auth_token');
+    res.clearCookie('auth_token',{
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
+            path: '/',
+        });
     responseHandler(res, 200, "Logout Successfully");
 };
